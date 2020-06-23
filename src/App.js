@@ -9,13 +9,15 @@ import './App.css';
 import Sidebar from './components/sidebar/sidebar';
 import {BrowserRouter} from "react-router-dom";
 import SignUpForm from '../src/components/signup/signup';
+import MapView from './components/mapview/mapview';
 
 
 
 function App() {
   return (
     <div className="App">
-      <Sidebar />
+      {/* <Sidebar /> */}
+
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>
@@ -26,6 +28,9 @@ function App() {
           </Route>
           <Route path="/signup">
             <SignUpForm />
+          </Route>
+          <Route path="/mapview">
+            <MapView />
           </Route>
         </Switch>
       </BrowserRouter>
