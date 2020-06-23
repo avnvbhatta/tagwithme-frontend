@@ -3,6 +3,7 @@ import './signup.scss'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import LoginForm from "../login/login";
 
 const SignUpForm = () => {
     const onFinish = values => {
@@ -45,7 +46,7 @@ const SignUpForm = () => {
                         </Button>
                         <div className="div-footer">
                             Already have an account?
-                            <Link to="/login" className="link">
+                            <Link to="/login"  className="link">
                                 <a href="/">Log In</a>
                             </Link>
                         </div>

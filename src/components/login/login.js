@@ -3,6 +3,7 @@ import './login.scss'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import SignUpForm from '../signup/signup';
 
 const LoginForm = () => {
     const onFinish = values => {
