@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import MyButton from "../src/components/button/button";
+import Header from "../src/components/header/header";
+import LoginForm from "../src/components/login/login";
+import SignupForm from "../src/components/signup/signup";
+
 import './App.css';
+import Sidebar from './components/sidebar/sidebar';
+import {BrowserRouter} from "react-router-dom";
+
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Sidebar />
+
+      <BrowserRouter>
+        <SignupForm />
+      </BrowserRouter>
+      
     </div>
   );
 }

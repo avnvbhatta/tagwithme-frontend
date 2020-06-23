@@ -1,0 +1,30 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background:fuchsia;
+
+    .appLogo{
+        height: 30px;
+        width: 30px;
+        background: red;
+    }
+
+    .notifProfile{
+        display: flex;
+        .notification{
+            height: 30px;
+            width: 30px;
+            background: blue;
+        }
+    
+        .profile{
+            height: 30px;
+            width: 30px;
+            background: green;
+        }
+    }
+    
+
+
+}
