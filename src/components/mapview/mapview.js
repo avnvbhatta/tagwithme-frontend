@@ -36,7 +36,7 @@ const MapView = () => {
               params: {
                 apikey: "LMX62etGfMGogQNGUjnr9Dh2yvtQ88sI",
                 geoPoint: Math.round(coordinates.latitude)+","+Math.round(coordinates.longitude),
-                size: 200
+                size: 20
               }
             });
             const events = response.data._embedded.events;
@@ -53,11 +53,14 @@ const MapView = () => {
                   images: event.images,
                   url: event.url,
                   venue: event._embedded.venues[0].name,
+                  distance: event._embedded.venues[0].distance,
+                  address: event._embedded.venues[0].address.line1,
                   city: event._embedded.venues[0].city,
                   state: event._embedded.venues[0].state,
                   location: event._embedded.venues[0].location,
                   parking: event._embedded.venues[0].parkingDetail,
-                  priceRange: event.priceRanges
+                  priceRange: event.priceRanges,
+                  postalCode: event._embedded.venues[0].postalCode
                 }
                 eventsArray.push(eventInfo);
               } catch (error) {
@@ -98,15 +101,34 @@ const MapView = () => {
             // create a HTML element for each popup
             var el = document.createElement('div');
             el.className = 'marker';
+            
 
             // make a marker for each feature and add to the map
             new mapboxgl.Marker(el)
                 .setLngLat([event.location.longitude, event.location.latitude])
                 .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                .setHTML('<h3>'+event.name+'</h3><p>This is where I am</p>'))
+                .setHTML(
+                `<div class="popup">
+                  <div class="content">
+                    <div class="left">
+                      <div class="title">${event.name}</div>
+                      <div class="venue">${event.venue}</div>
+                        <div class="address">${event.address},
+                          <br>${event.city.name}, ${event.state.stateCode}, ${event.postalCode}</div>
+                      <div class="distancePrice"><div>${event.distance} miles away</div><div>$${event.priceRange === undefined ? "" : event.priceRange[0].min} - $${event.priceRange === undefined ? "" : event.priceRange[0].max}</div></div>
+                    </div>
+                    <div class="right">
+                      <div class="datetime">June 16th <br> 7PM</div>
+                    </div>
+                  </div>
+                  <div class="interested"><div>Interested</div></div>
+                
+                </div>`))
                 .addTo(map);
 
         })
+
+    
       };
       if (!map) initializeMap({ setMap, mapContainer });
       }
