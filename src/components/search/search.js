@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { AutoComplete } from 'antd';
+import { Input, AutoComplete } from 'antd';
 import "./search.scss"
 import axios from "axios";
-
+import { SearchOutlined } from '@ant-design/icons';
 
 
 const Search = () => {
@@ -50,8 +50,9 @@ const Search = () => {
         className="searchBox" 
         onSelect={onSelect}
         onSearch={onSearch}
-        placeholder="Enter an address, neighborhood, city or ZIP code"
-      />
+      >
+           <Input prefix={<SearchOutlined />} placeholder="Enter an address, neighborhood, city or ZIP code" />
+      </AutoComplete>
       
     </>
   );

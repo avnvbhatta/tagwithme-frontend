@@ -6,7 +6,6 @@ import axios from "axios";
 import Search from "../search/search"
   
 const MapView = () => {  
-    const [locationPermission, setLocationPermission] = useState(false);
     const [map, setMap] = useState(null);
     const mapContainer = useRef(null);
     const [coordinates, setCoordinates] = useState(null);
@@ -15,7 +14,6 @@ const MapView = () => {
     useEffect(() => {    
       getCurrentPosition()
       .then(res =>{
-          setLocationPermission(true);
           const {coords} = res;
           const {longitude, latitude} = coords;
           return {longitude: longitude, latitude: latitude}
@@ -28,7 +26,7 @@ const MapView = () => {
       )
       .catch(e=>{
         console.log('error', e);
-        setLocationPermission(false);
+        setCoordinates({longitude: -73.935242, latitude: 40.730610}); //nyc geo location
       })
       
     }, []);
@@ -42,31 +40,30 @@ const MapView = () => {
               params: {
                 apikey: "LMX62etGfMGogQNGUjnr9Dh2yvtQ88sI",
                 geoPoint: Math.round(coordinates.latitude)+","+Math.round(coordinates.longitude),
-                size: 20
+                size: 100
               }
             });
             const events = response.data._embedded.events;
-
             let eventsArray = []
             events.map(event => {
               try {
                 let eventInfo = {
-                  name: event.name,
+                  name: event.name === undefined ? "" : event.name,
                   date: {
-                    startTime: event.dates.start.localTime,
-                    startDate: event.dates.start.localDate
+                    startTime: event.dates.start.localTime === undefined ? "" : event.dates.start.localTime,
+                    startDate: event.dates.start.localDate === undefined ? "" : event.dates.start.localDate 
                   },
-                  images: event.images,
-                  url: event.url,
-                  venue: event._embedded.venues[0].name,
-                  distance: event._embedded.venues[0].distance,
-                  address: event._embedded.venues[0].address.line1,
-                  city: event._embedded.venues[0].city,
-                  state: event._embedded.venues[0].state,
-                  location: event._embedded.venues[0].location,
-                  parking: event._embedded.venues[0].parkingDetail,
-                  priceRange: event.priceRanges,
-                  postalCode: event._embedded.venues[0].postalCode
+                  images: event.images === undefined ? [] : event.images,
+                  url: event.url === undefined ? "" : event.url,
+                  venue: event._embedded.venues[0].name === undefined ? "" : event._embedded.venues[0].name,
+                  distance: event._embedded.venues[0].distance === undefined ? "" : `${event._embedded.venues[0].distance} miles away`,
+                  address: event._embedded.venues[0].address.line1 === undefined ? "" : event._embedded.venues[0].address.line1,
+                  city: event._embedded.venues[0].city === undefined ? "" : event._embedded.venues[0].city,
+                  state: event._embedded.venues[0].state === undefined ? {} : event._embedded.venues[0].state,
+                  location: event._embedded.venues[0].location === undefined ? {latitude: -70, longitude: 40} : event._embedded.venues[0].location,
+                  parking: event._embedded.venues[0].parkingDetail === undefined ? "" : event._embedded.venues[0].parkingDetail,
+                  priceRange: event.priceRanges === undefined ? "" :  `$${event.priceRanges[0].min} - $${event.priceRanges[0].max}`,
+                  postalCode: event._embedded.venues[0].postalCode === undefined ? "" : event._embedded.venues[0].postalCode
                 }
                 eventsArray.push(eventInfo);
               } catch (error) {
@@ -75,7 +72,6 @@ const MapView = () => {
               
             })
             setEvents(eventsArray)
-            console.log(eventsArray)
             
         }
 
@@ -89,12 +85,11 @@ const MapView = () => {
         mapboxgl.accessToken = "pk.eyJ1IjoiYXZudmJoYXR0YSIsImEiOiJja2JyOXRjancxNGthMndsbTE4dDNrdDB0In0.-CLS7_4DVmpgROSDPOoltA";
 
         const initializeMap = ({ setMap, mapContainer }) => {
-        console.log('initialize map')
         const map = new mapboxgl.Map({
           container: mapContainer.current,
           style: "mapbox://styles/mapbox/streets-v11", // stylesheet location
           center: [coordinates.longitude, coordinates.latitude],
-          zoom: 5
+          zoom: 10
         });
   
         map.on("load", () => {
@@ -121,10 +116,10 @@ const MapView = () => {
                       <div class="venue">${event.venue}</div>
                         <div class="address">${event.address},
                           <br>${event.city.name}, ${event.state.stateCode}, ${event.postalCode}</div>
-                      <div class="distancePrice"><div>${event.distance} miles away</div><div>$${event.priceRange === undefined ? "" : event.priceRange[0].min} - $${event.priceRange === undefined ? "" : event.priceRange[0].max}</div></div>
+                      <div class="distancePrice"><div>${event.distance}</div><div>${event.priceRange}</div></div>
                     </div>
                     <div class="right">
-                      <div class="datetime">June 16th <br> 7PM</div>
+                      <div class="datetime">${event.date.startDate}<br> ${event.date.startTime}</div>
                     </div>
                   </div>
                   <div class="interested"><div>Interested</div></div>
