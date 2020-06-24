@@ -3,8 +3,10 @@ import mapboxgl from 'mapbox-gl';
 import "./mapview.scss";
 import { getCurrentPosition } from "../../utils/utils";
 import axios from "axios";
+import Search from "../search/search"
   
 const MapView = () => {  
+    const [locationPermission, setLocationPermission] = useState(false);
     const [map, setMap] = useState(null);
     const mapContainer = useRef(null);
     const [coordinates, setCoordinates] = useState(null);
@@ -13,7 +15,7 @@ const MapView = () => {
     useEffect(() => {    
       getCurrentPosition()
       .then(res =>{
-          
+          setLocationPermission(true);
           const {coords} = res;
           const {longitude, latitude} = coords;
           return {longitude: longitude, latitude: latitude}
@@ -24,6 +26,10 @@ const MapView = () => {
             setCoordinates(c);
           }
       )
+      .catch(e=>{
+        console.log('error', e);
+        setLocationPermission(false);
+      })
       
     }, []);
 
@@ -133,7 +139,10 @@ const MapView = () => {
       if (!map) initializeMap({ setMap, mapContainer });
       }
     }, [events]);
-    return <div ref={el => (mapContainer.current = el)} className="mapContainer" />;
+    return (<div>
+        <div ref={el => (mapContainer.current = el)} className="mapContainer" />
+        <Search />
+      </div>)  
   };
  
 export default MapView;
