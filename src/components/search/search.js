@@ -6,14 +6,16 @@ import axios from "axios";
 import { SearchOutlined } from '@ant-design/icons';
 
 
-const Search = () => {
+const Search = (props) => {
   const [options, setOptions] = useState([]);
   const [cityList, setCityList] = useState([]);
   const [cityListLoaded, setCityListLoaded] = useState(false);
-
+  const [searchedCoordinates, setsearchedCoordinates] = props.searchedCoordinates;
+    const [test, setTest] = props.test;
   
   const onSearch = async searchText => {
     if(searchText){
+        setTest(searchText)
         const locationAutoCompleteURL = 
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json`;
 
@@ -24,11 +26,11 @@ const Search = () => {
             country: "US" //can change country here later
             }
         });
-
+       
         let jsonCityList = await (response.data.features);
         let cityList = []
         jsonCityList.map(city => {
-            cityList.push({value: city.place_name})
+            cityList.push({value: city.place_name, coordinates: city.center})
         })
         setCityList(cityList);
         setCityListLoaded(true);
@@ -38,9 +40,9 @@ const Search = () => {
     }       
     };
 
-  const onSelect = data => {
-    console.log('onSelect', data);
-  };
+    const onSelect = (city, coordinates) => {
+        setsearchedCoordinates(coordinates);
+    };
 
 
   return (
@@ -48,7 +50,7 @@ const Search = () => {
       <AutoComplete
         options={options}
         className="searchBox" 
-        onSelect={onSelect}
+        onSelect={(city, coordinates) => onSelect(city, coordinates)}
         onSearch={onSearch}
       >
            <Input prefix={<SearchOutlined />} placeholder="Enter an address, neighborhood, city or ZIP code" />

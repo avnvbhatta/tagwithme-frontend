@@ -10,6 +10,8 @@ const MapView = () => {
     const mapContainer = useRef(null);
     const [coordinates, setCoordinates] = useState(null);
     const [events, setEvents] = useState(null);
+    const [test, setTest] = useState('');
+    const [searchedCoordinates, setSearchedCoordinates] = useState(null);
 
     useEffect(() => {    
       getCurrentPosition()
@@ -131,12 +133,21 @@ const MapView = () => {
 
     
       };
-      if (!map) initializeMap({ setMap, mapContainer });
+      initializeMap({ setMap, mapContainer });
       }
-    }, [events]);
+    }, [events, searchedCoordinates]);
+
+    useEffect(() => {
+      
+      if(searchedCoordinates !== null){
+        setCoordinates({longitude: searchedCoordinates.coordinates[0], latitude: searchedCoordinates.coordinates[1]})
+      }
+     
+    }, [searchedCoordinates]);
+
     return (<div>
         <div ref={el => (mapContainer.current = el)} className="mapContainer" />
-        <Search />
+        <Search searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]} test={[test, setTest]}/>
       </div>)  
   };
  
