@@ -3,11 +3,19 @@ import './login.scss'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import SignUpForm from '../signup/signup';
+import { useHistory } from "react-router-dom";
 
 const LoginForm = () => {
+    const history = useHistory();
     const onFinish = values => {
         console.log('Received values of form: ', values);
+        const isValidLogin = true;
+
+        //Navigate to mapview page if valid
+        if(isValidLogin){
+            history.push("/mapview");
+        }
+        
     };
     return (
         <div className="login-container">
