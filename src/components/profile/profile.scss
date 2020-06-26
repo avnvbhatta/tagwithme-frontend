@@ -1,0 +1,66 @@
+.profileContainer{
+    display: fkex;
+    flex-direction: column;
+
+    .userInfo{
+        display: flex;
+        flex-direction: row;
+        
+        .userImg{
+            img{
+                height: 250px;
+                width: 250px;
+                border-radius: 50%;
+                border: 2px solid white;
+            }
+            
+            
+        }
+        .userDetails{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 20px;
+            
+            .userSocial, .userName, .userLocation{
+                display: flex;
+                flex-direction: row;
+            }
+
+            .userName{
+                font-size: 40px;
+                padding: 5px 0px;
+            }
+
+            .userLocation{
+                font-size: 20px;
+                padding: 5px 0px;
+                span{
+                    position: relative;
+                    top: 2px;
+                }
+            }
+
+            .userSocial{
+                padding: 5px 0px;
+                font-size: 40px;
+                .userSocialIcons{
+                    padding: 0px 15px 0px 0px;
+                }
+            }
+
+            .messageUser{
+                padding: 5px 0px;
+                button{
+                    width:150px;
+                    border-radius: 50px;
+                    height: 50px;
+                }
+            }
+
+        }
+    }
+
+    
+
+}
