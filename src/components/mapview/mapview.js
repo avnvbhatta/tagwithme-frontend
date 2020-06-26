@@ -4,6 +4,7 @@ import "./mapview.scss";
 import { getCurrentPosition } from "../../utils/utils";
 import axios from "axios";
 import Search from "../search/search"
+import ListView from '../listview/listview';
   
 const MapView = () => {  
     const [map, setMap] = useState(null);
@@ -44,12 +45,18 @@ const MapView = () => {
                 size: 100
               }
             });
-            const events = response.data._embedded.events;
+            const eventsRes = await response.data._embedded.events;
+            console.log(eventsRes)
             let eventsArray = []
-            events.map(event => {
+            eventsRes.map(event => {
               try {
                 let eventInfo = {
+                  id: event.id === undefined ? "" : event.id,
                   name: event.name === undefined ? "" : event.name,
+                  classification: event.classification === undefined ? [] : {
+                    segment: event.classifications[0].segment.name,
+				            genre: event.classifications[0].genre.name
+                  },
                   date: {
                     startTime: event.dates.start.localTime === undefined ? "" : event.dates.start.localTime,
                     startDate: event.dates.start.localDate === undefined ? "" : event.dates.start.localDate 
@@ -67,13 +74,13 @@ const MapView = () => {
                   postalCode: event._embedded.venues[0].postalCode === undefined ? "" : event._embedded.venues[0].postalCode
                 }
                 eventsArray.push(eventInfo);
+                
               } catch (error) {
                 console.log('error', error)
               }
               
             })
-            setEvents(eventsArray)
-            
+            setEvents(eventsArray);            
         }
 
         getTicketMasterEvents();
@@ -83,6 +90,7 @@ const MapView = () => {
 
     useEffect(() => {    
       if(events){
+        console.log(events)
         mapboxgl.accessToken = "pk.eyJ1IjoiYXZudmJoYXR0YSIsImEiOiJja2JyOXRjancxNGthMndsbTE4dDNrdDB0In0.-CLS7_4DVmpgROSDPOoltA";
 
         const initializeMap = ({ setMap, mapContainer }) => {
@@ -147,6 +155,7 @@ const MapView = () => {
     return (<div>
         <div ref={el => (mapContainer.current = el)} className="mapContainer" />
         <Search searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
+        {events ? <ListView events={[events, setEvents]}/> : <div>Loading </div>}
       </div>)  
   };
  
