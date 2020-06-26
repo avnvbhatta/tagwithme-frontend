@@ -11,11 +11,9 @@ const Search = (props) => {
   const [cityList, setCityList] = useState([]);
   const [cityListLoaded, setCityListLoaded] = useState(false);
   const [searchedCoordinates, setsearchedCoordinates] = props.searchedCoordinates;
-    const [test, setTest] = props.test;
   
   const onSearch = async searchText => {
     if(searchText){
-        setTest(searchText)
         const locationAutoCompleteURL = 
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json`;
 
