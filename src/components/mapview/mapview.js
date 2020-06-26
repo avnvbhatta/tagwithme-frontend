@@ -10,7 +10,6 @@ const MapView = () => {
     const mapContainer = useRef(null);
     const [coordinates, setCoordinates] = useState(null);
     const [events, setEvents] = useState(null);
-    const [test, setTest] = useState('');
     const [searchedCoordinates, setSearchedCoordinates] = useState(null);
 
     useEffect(() => {    
@@ -147,7 +146,7 @@ const MapView = () => {
 
     return (<div>
         <div ref={el => (mapContainer.current = el)} className="mapContainer" />
-        <Search searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]} test={[test, setTest]}/>
+        <Search searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
       </div>)  
   };
  
