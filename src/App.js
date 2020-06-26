@@ -1,16 +1,12 @@
 import React from 'react';
-import MyButton from "../src/components/button/button";
-import Header from "../src/components/header/header";
 import LoginForm from "../src/components/login/login";
-import SignupForm from "../src/components/signup/signup";
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-import './App.css';
-import Sidebar from './components/sidebar/sidebar';
+import './App.scss';
 import {BrowserRouter} from "react-router-dom";
 import SignUpForm from '../src/components/signup/signup';
-import MapView from './components/mapview/mapview';
 import Profile from './components/profile/profile';
+import EventsView from './components/events/eventsview';
 
 
 
@@ -30,11 +26,11 @@ function App() {
           <Route path="/signup">
             <SignUpForm />
           </Route>
-          <Route path="/mapview">
-            <MapView />
-          </Route>
           <Route path="/profile">
             <Profile />
+          </Route>
+          <Route path="/events">
+            <EventsView />
           </Route>
         </Switch>
       </BrowserRouter>

@@ -36,13 +36,11 @@ const ListView = (props) =>{
                     
                 ]}
                 extra={
-                [
                     <img
-                        width={272}
-                        alt="logo"
-                        src={event.images[0].url}
-                    />,
-                ]  
+                    width={272}
+                    alt="logo"
+                    src={event.images[0].url}
+                /> 
                 }
             >
                 <List.Item.Meta

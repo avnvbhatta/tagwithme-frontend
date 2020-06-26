@@ -1,9 +1,7 @@
 .mapContainer {
-    height: 100vh;
+    height: calc(100vh - 100px);
     position: relative;
 }
-
-
 
 .marker {
     background-image: url('marker.png');
