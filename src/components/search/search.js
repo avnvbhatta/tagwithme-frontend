@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef} from 'react';
 import 'antd/dist/antd.css';
 import { Input, AutoComplete } from 'antd';
 import "./search.scss"
 import axios from "axios";
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 
 const Search = (props) => {
@@ -11,6 +11,7 @@ const Search = (props) => {
   const [cityList, setCityList] = useState([]);
   const [cityListLoaded, setCityListLoaded] = useState(false);
   const [searchedCoordinates, setsearchedCoordinates] = props.searchedCoordinates;
+
   
   const onSearch = async searchText => {
     if(searchText){
@@ -51,7 +52,8 @@ const Search = (props) => {
         onSelect={(city, coordinates) => onSelect(city, coordinates)}
         onSearch={onSearch}
       >
-           <Input prefix={<SearchOutlined />} placeholder="Enter an address, neighborhood, city or ZIP code" />
+           <Input prefix={<SearchOutlined />} 
+           suffix={<CloseCircleOutlined />} placeholder="Enter an address, neighborhood, city or ZIP code" />
       </AutoComplete>
       
     </>

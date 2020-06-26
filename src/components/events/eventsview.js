@@ -6,7 +6,7 @@ import Search from "../search/search"
 import ListView from '../listview/listview';
 import MapView from '../mapview/mapview';
 import { Tabs } from 'antd';
-import { UnorderedListOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs;
 
   
@@ -14,10 +14,6 @@ const EventsView = () => {
     const [coordinates, setCoordinates] = useState(null);
     const [events, setEvents] = useState(null);
     const [searchedCoordinates, setSearchedCoordinates] = useState(null);
-
-    const handleChange = (key) =>{
-      console.log(key)
-    }
 
     useEffect(() => {    
       getCurrentPosition()
@@ -99,9 +95,9 @@ const EventsView = () => {
      
     }, [searchedCoordinates]);
 
-    return (<div>
-        <Search searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
-        <Tabs defaultActiveKey="1" onChange={handleChange} >
+    return (<div className="eventsContainer">
+        <Search className="searchBar" searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
+        <Tabs defaultActiveKey="1" >
           <TabPane 
             tab={
               <span>
@@ -111,7 +107,7 @@ const EventsView = () => {
             }
             key="1"
           >
-            {events ? <MapView events={[events, setEvents]} coordinates={[coordinates, setCoordinates]}/> : <div>Loading </div>}
+            {events ? <MapView events={[events, setEvents]} coordinates={[coordinates, setCoordinates]}/> : <LoadingOutlined />}
           </TabPane>
           <TabPane
             tab={
@@ -122,7 +118,7 @@ const EventsView = () => {
             }
             key="2"
           >
-            {events ? <ListView events={[events, setEvents]}/> : <div>Loading </div>}
+            {events ? <ListView events={[events, setEvents]}/> : <LoadingOutlined />}
           </TabPane>
         </Tabs>
       </div>)  

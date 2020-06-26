@@ -13,7 +13,7 @@ const LoginForm = () => {
 
         //Navigate to mapview page if valid
         if(isValidLogin){
-            history.push("/mapview");
+            history.push("/events");
         }
         
     };
