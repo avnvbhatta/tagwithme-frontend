@@ -5,8 +5,11 @@ import axios from "axios";
 import Search from "../search/search"
 import ListView from '../listview/listview';
 import MapView from '../mapview/mapview';
+import Sidebar from '../sidebar/sidebar';
 import { Tabs } from 'antd';
 import { UnorderedListOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
 const { TabPane } = Tabs;
 
   
@@ -57,10 +60,10 @@ const EventsView = () => {
                   classification: event.classification === undefined ? [] : {
                     segment: event.classifications[0].segment.name,
 				            genre: event.classifications[0].genre.name
-                  },
+                  },//moment(event.dates.start.localTime, 'HH:mm:ss').format("hA")
                   date: {
-                    startTime: event.dates.start.localTime === undefined ? "" : event.dates.start.localTime,
-                    startDate: event.dates.start.localDate === undefined ? "" : event.dates.start.localDate 
+                    startTime: event.dates.start.localTime === undefined ? "" : moment(event.dates.start.localTime, 'HH:mm:ss').format("hA"),
+                    startDate: event.dates.start.localDate === undefined ? "" : moment(event.dates.start.localDate ).format("ddd, MMM Do, YYYY"),
                   },
                   images: event.images === undefined ? [] : event.images,
                   url: event.url === undefined ? "" : event.url,
@@ -96,6 +99,7 @@ const EventsView = () => {
     }, [searchedCoordinates]);
 
     return (<div className="eventsContainer">
+        {/* <Sidebar /> */}
         <Search className="searchBar" searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
         <Tabs defaultActiveKey="1" >
           <TabPane 

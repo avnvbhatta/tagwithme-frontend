@@ -30,7 +30,7 @@ const ListView = (props) =>{
             <List.Item
                 key={event.id}
                 actions={[
-                    <IconText icon={CalendarTwoTone} text={`${event.date.startDate} ${event.date.startTime}`} key="list-vertical-star-o" />,
+                    <IconText icon={CalendarTwoTone} text={`${event.date.startDate} @ ${event.date.startTime}`} key="list-vertical-star-o" />,
                     <IconText icon={CarTwoTone} text={`${event.distance}`} key="list-vertical-message" />,
                     <IconText icon={DollarTwoTone} text={`${event.priceRange}`} key="list-vertical-like-o" />,
                     
