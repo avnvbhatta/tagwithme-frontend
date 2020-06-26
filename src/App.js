@@ -10,6 +10,7 @@ import Sidebar from './components/sidebar/sidebar';
 import {BrowserRouter} from "react-router-dom";
 import SignUpForm from '../src/components/signup/signup';
 import MapView from './components/mapview/mapview';
+import Profile from './components/profile/profile';
 
 
 
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route path="/mapview">
             <MapView />
+          </Route>
+          <Route path="/profile">
+            <Profile />
           </Route>
         </Switch>
       </BrowserRouter>
