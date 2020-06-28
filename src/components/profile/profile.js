@@ -2,7 +2,7 @@ import React from "react"
 import "./profile.scss"
 import * as Vibrant from 'node-vibrant'
 import { getVibrantColors } from "../../utils/utils";
-import { FacebookOutlined, TwitterOutlined, InstagramOutlined, AimOutlined } from '@ant-design/icons';
+import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 const Profile = (props) => {
     return ( 
@@ -15,7 +15,7 @@ const Profile = (props) => {
                     <div className="userDetails">
                         <div className="userName">Binish Koirala</div>
                         <div className="userLocation">
-                            <AimOutlined />
+                            <EnvironmentOutlined />
                             <div>Des Moines, IA</div>
                             
                         </div>

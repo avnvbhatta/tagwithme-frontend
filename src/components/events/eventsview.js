@@ -60,7 +60,7 @@ const EventsView = () => {
                   classification: event.classification === undefined ? [] : {
                     segment: event.classifications[0].segment.name,
 				            genre: event.classifications[0].genre.name
-                  },//moment(event.dates.start.localTime, 'HH:mm:ss').format("hA")
+                  },
                   date: {
                     startTime: event.dates.start.localTime === undefined ? "" : moment(event.dates.start.localTime, 'HH:mm:ss').format("hA"),
                     startDate: event.dates.start.localDate === undefined ? "" : moment(event.dates.start.localDate ).format("ddd, MMM Do, YYYY"),

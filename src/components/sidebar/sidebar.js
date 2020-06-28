@@ -3,47 +3,60 @@ import ReactDOM from 'react-dom';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
+import { Link, withRouter, useHistory} from 'react-router-dom';
+
 import {
     HomeOutlined,
     CommentOutlined,
     UserOutlined,
-    NotificationOutlined
+    NotificationOutlined,
+    SlackOutlined
   } from '@ant-design/icons';
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+const { Sider } = Layout;
 
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+    const history = useHistory();
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
     };
+    const [selectedKey, setSelectedKey] = useState('/home')
+
+    const logoClick = () => {
+        setSelectedKey('/home')
+        history.push(selectedKey);
+    }
+
+    const menuSelect = (e) =>{
+        setSelectedKey(e.key)
+    }
+     
+
+    if (props.location.pathname === '/' || props.location.pathname === '/login' || props.location.pathname === '/signup') return null;
     return (  
-        <Layout style={{ minHeight: '100vh' }}>
-            <Sider 
+            <Sider className="sidebar"
                 collapsible 
                 breakpoint="sm"
                 collapsed={collapsed} onCollapse={onCollapse}>
-                <div className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                    <Menu.Item key="1" icon={<HomeOutlined />}>
-                        Home
+                <SlackOutlined onClick={logoClick} style={{ fontSize: '32px', color: '#08c' }} className="logo" />
+                <Menu theme="dark" defaultSelectedKeys={selectedKey} selectedKeys={selectedKey} mode="inline" onSelect={menuSelect}>
+                    <Menu.Item key="/home" icon={<HomeOutlined />}>
+                        Home<Link to="/home" />
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined />} >
-                        Profile
+                    <Menu.Item key="/profile" icon={<UserOutlined />} >
+                        Profile<Link to="/profile" />
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<CommentOutlined />} >
-                        Messages
+                    <Menu.Item key="/message" icon={<CommentOutlined />} >
+                        Messages<Link to="/messages" />
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<NotificationOutlined />} >
-                        Notifications   
+                    <Menu.Item key="/notifications" icon={<NotificationOutlined />} >
+                        Notifications<Link to="/notifications" />   
                     </Menu.Item>
                 </Menu>
             </Sider>
-
-      </Layout>
     );
 }
  
-export default Sidebar;
+export default withRouter(Sidebar);
