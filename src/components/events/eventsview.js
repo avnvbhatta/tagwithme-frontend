@@ -5,7 +5,6 @@ import axios from "axios";
 import Search from "../search/search"
 import ListView from '../listview/listview';
 import MapView from '../mapview/mapview';
-import Sidebar from '../sidebar/sidebar';
 import { Tabs } from 'antd';
 import { UnorderedListOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -14,10 +13,17 @@ const { TabPane } = Tabs;
 
   
 const EventsView = () => {  
+    //Initial coordinates for displaying map
     const [coordinates, setCoordinates] = useState(null);
+
+    //Set state based on events fetched from TicketMaster
     const [events, setEvents] = useState(null);
+
+    //Set map coordinates based on search
     const [searchedCoordinates, setSearchedCoordinates] = useState(null);
 
+    //Hook to get current user coordinates
+    //Defaults to NYC coordinates if user denies permission to locate
     useEffect(() => {    
       getCurrentPosition()
       .then(res =>{
@@ -39,9 +45,9 @@ const EventsView = () => {
     }, []);
 
 
+    //Get events from ticketmaster
     useEffect(() => {    
       if(coordinates){
-
         const getTicketMasterEvents = async () => {
           const response = await axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
               params: {
@@ -54,6 +60,7 @@ const EventsView = () => {
             let eventsArray = []
             eventsRes.map(event => {
               try {
+                //Only store required details from ticketmaster response
                 let eventInfo = {
                   id: event.id === undefined ? "" : event.id,
                   name: event.name === undefined ? "" : event.name,
@@ -90,16 +97,14 @@ const EventsView = () => {
       }
     }, [coordinates]);
 
+    //Set coordinates based on search
     useEffect(() => {
-      
       if(searchedCoordinates !== null){
         setCoordinates({longitude: searchedCoordinates.coordinates[0], latitude: searchedCoordinates.coordinates[1]})
       }
-     
     }, [searchedCoordinates]);
 
     return (<div className="eventsContainer">
-        {/* <Sidebar /> */}
         <Search className="searchBar" searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
         <Tabs defaultActiveKey="1" >
           <TabPane 
