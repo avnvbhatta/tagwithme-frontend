@@ -1,13 +1,13 @@
-import React from "react"
+import React, { useContext } from "react"
 import "./profile.scss"
-import * as Vibrant from 'node-vibrant'
-import { getVibrantColors } from "../../utils/utils";
+// import * as Vibrant from 'node-vibrant'
+// import { getVibrantColors } from "../../utils/utils";
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import MessageButton from '../button/message';
-import { useContext } from "react";
 import { UserContext } from "../../utils/usercontext";
 
 const Profile = (props) => {
+    //Get global user from context to display data
     const {user} = useContext(UserContext);
     return ( 
         <div>
@@ -17,7 +17,7 @@ const Profile = (props) => {
                         <img  src={"./abhinav.png"} alt=""/>
                     </div>
                     <div className="userDetails">
-                        <div className="userName">{`${user.id} ${user.name} ${user.email}`}</div>
+                        <div className="userName">{`${user.userData.id} ${user.userData.name} ${user.userData.email}`}</div>
                         <div className="userLocation">
                             <EnvironmentOutlined />
                             <div>Des Moines, IA</div>
