@@ -1,22 +1,19 @@
-import React from 'react';
-import LoginForm from "../src/components/login/login";
-import { Switch, Route } from 'react-router-dom';
-
+import React, { useState, useMemo } from 'react';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import './App.scss';
-import {BrowserRouter} from "react-router-dom";
+import { Layout } from 'antd';
+import LoginForm from "../src/components/login/login";
 import SignUpForm from '../src/components/signup/signup';
 import Profile from './components/profile/profile';
 import EventsView from './components/events/eventsview';
-import { Layout } from 'antd';
 import Sidebar from './components/sidebar/sidebar';
 import Messages from './components/messages/messages';
 import Notifications from './components/notifications/notifications';
 import { UserContext } from './utils/usercontext';
-import { useState } from 'react';
-import { useMemo } from 'react';
+import ProtectedRoute from './utils/protectedroute';
 
 
-const { Sider,Content } = Layout;
+const { Content } = Layout;
 
 
 function App() {
@@ -25,47 +22,30 @@ function App() {
   //will only change the providedUser value if the user is changed
   const providedUser = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-
+  //Wrapping the parent layout with UserContext.Provider so that
+  //the components within the UserContext.Provider will have access to providedUser
   return (
     <div className="App">
       <BrowserRouter>
+      <UserContext.Provider value={providedUser}>
         <Layout>
           <Sidebar>Sider</Sidebar>
           <Layout>
             <Content>
               <Switch>
-              <UserContext.Provider value={providedUser}>
-                  <Route path="/" exact>
-                    <LoginForm />
-                  </Route>
-                  <Route path="/login">
-                    <LoginForm />
-                  </Route>
-                  <Route path="/signup">
-                    <SignUpForm />
-                  </Route>
-                  <Route path="/profile">
-                    <Profile />
-                  </Route>
-                  <Route path="/home">
-                    <EventsView />
-                  </Route>
-                  <Route path="/events">
-                    <EventsView />
-                  </Route>
-                  <Route path="/messages">
-                    <Messages />
-                  </Route>
-                  <Route path="/notifications">
-                    <Notifications />
-                  </Route>
-                </UserContext.Provider>
-                
+                  <Route path="/" exact component={LoginForm} />
+                  <Route path="/login" component={LoginForm} />
+                  <Route path="/signup" component={SignUpForm} />
+                  <ProtectedRoute path="/profile" component={Profile} />
+                  <ProtectedRoute path="/home" component={EventsView} />
+                  <ProtectedRoute path="/events" component={EventsView} />
+                  <ProtectedRoute path="/messages" component={Messages} />
+                  <ProtectedRoute path="/notifications" component={Notifications} />
               </Switch>
             </Content>
           </Layout>
         </Layout>
-        
+        </UserContext.Provider>
       </BrowserRouter>
     </div>
   );
