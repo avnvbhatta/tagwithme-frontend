@@ -1,13 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './signup.scss'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import LoginForm from "../login/login";
-
-const SignUpForm = () => {
+import Axios from "axios";
+import { useHistory } from "react-router-dom";
+import { Alert } from "antd";
+const SignUpForm = (props) => {
+    const history = useHistory();
+    const [errors, setErrors] = useState(null);
+    const [signUpSuccess, setSignUpSuccess] = useState(false)
     const onFinish = values => {
-        console.log('Received values of form: ', values);
+        setErrors(null)
+        setSignUpSuccess(false)
+        Axios.post('http://localhost:4000/users/register', values).then(res=>{
+            setSignUpSuccess(true);
+        }).catch(err => {
+            if(err.response){
+                setErrors(err.response.data)
+            }
+        })
+
     };
     return (
         <div className="signup-container">
@@ -19,7 +32,7 @@ const SignUpForm = () => {
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
             >       <Form.Item
-                    name="fullname"
+                    name="name"
                     rules={[{ required: true, message: 'Please enter your full name.' }]}
                 >
                         <Input prefix={<UserOutlined className="icon site-form-item-icon" />} placeholder="Full Name" />
@@ -51,6 +64,17 @@ const SignUpForm = () => {
                             </Link>
                         </div>
                     </Form>
+                    {errors ? errors.map(error=>
+                         <Alert className="alert" key={error.message} message={error.message} type="error" showIcon />
+                    ) : null  }
+                    {signUpSuccess ? 
+                        <Alert
+                            className="alert"
+                            message="Account Created. Please log in."
+                            type="success"
+                            showIcon
+                        /> : null}
+                    
                 </div>
             </div>
     )
