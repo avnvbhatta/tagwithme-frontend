@@ -4,20 +4,24 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
 import { Link, withRouter, useHistory} from 'react-router-dom';
-
+import Axios from "axios";
 import {
     HomeOutlined,
     CommentOutlined,
     UserOutlined,
     NotificationOutlined,
-    SlackOutlined
+    SlackOutlined,
+    LogoutOutlined
   } from '@ant-design/icons';
+import { useContext } from 'react';
+import { UserContext } from '../../utils/usercontext';
 
 const { Sider } = Layout;
 
 
 const Sidebar = (props) => {
     const history = useHistory();
+    //const {user, setUser} = useContext(UserContext);
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = collapsed => {
         setCollapsed(collapsed);
@@ -31,6 +35,18 @@ const Sidebar = (props) => {
 
     const menuSelect = (e) =>{
         setSelectedKey(e.key)
+    }
+
+    const handleLogOut = () =>{
+        Axios.get('http://localhost:4000/logout').then(res=>{
+           // setUser(null);
+            history.push('/login')
+        }).catch(err => {
+            
+            if(err.response){
+                console.log(err.response)
+            }
+        })   
     }
      
 
@@ -53,6 +69,9 @@ const Sidebar = (props) => {
                     </Menu.Item>
                     <Menu.Item key="/notifications" icon={<NotificationOutlined />} >
                         Notifications<Link to="/notifications" />   
+                    </Menu.Item>
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogOut}>
+                        Log Out  
                     </Menu.Item>
                 </Menu>
             </Sider>
