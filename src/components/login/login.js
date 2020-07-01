@@ -1,23 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import { useHistory, Link } from "react-router-dom";
 import './login.scss'
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
 import Axios from "axios";
-import { Alert } from "antd"
-import { useContext } from 'react';
 import { UserContext } from '../../utils/usercontext';
 
 
 const LoginForm = (props) => {
+    //method to update context value of user
+    const {setUser} = useContext(UserContext);
+    //method to navigate to other pages
     const history = useHistory();
+    //states for errors during API calls
     const [errors, setErrors] = useState(null);
-    const {user, setUser} = useContext(UserContext);
-
+     
+    //On form submit
     const onFinish = values => {
-
+        //API call to users endpoint. Gets user info, 
+        //stores it in global context and navigates to /home
         Axios.post('http://localhost:4000/users/login', values).then(res=>{
+            console.log(res)
             const user = {
                 id: res.data.id,
                 name: res.data.name,
@@ -27,24 +30,16 @@ const LoginForm = (props) => {
                 authenticated: true,
                 userData: user
             }
-            setUser(user);
-            history.push('/events')
+            setUser(data);
+            history.push('/home')
         }).catch(err => {
             if(err.response){
                 console.log(err.response)
+                setErrors(err.response.data)
             }
         })        
     };
 
-    // const handleAuth = () =>{
-    // Axios.get("http://localhost:4000/dashboard", {withCrendentials:true}).then(res=>{
-    //     console.log(res)
-    // }).catch(err => {
-    //     if(err.response){
-    //         console.log(err.response.data)
-    //     }
-    // })
-    // }
     return (
         <div className="login-container">
             <div className="login-div">
@@ -88,7 +83,7 @@ const LoginForm = (props) => {
                         <div className="div-footer">
                             Don't have an account?
                             <Link to="/signup" className="link">
-                                <a href="/">Sign Up</a>
+                                Sign Up
                             </Link>
                         </div>
                     </Form>
