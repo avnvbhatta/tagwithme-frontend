@@ -1,12 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { List, Avatar, Space } from 'antd';
-import { MessageOutlined, LikeOutlined, StarOutlined, CalendarOutlined, DollarCircleOutlined, DollarCircleTwoTone, DollarTwoTone, CalendarTwoTone, CarTwoTone } from '@ant-design/icons';
+import { List, Space } from 'antd';
+import {  DollarTwoTone, CalendarTwoTone, CarTwoTone } from '@ant-design/icons';
 import InterestedButton from '../button/interested';
 
 const ListView = (props) =>{
-    const [events, setEvents] = props.events;
+    const [events] = props.events;
     const IconText = ({ icon, text }) => (
         <Space>
           {React.createElement(icon)}
