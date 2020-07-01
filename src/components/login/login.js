@@ -1,22 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './login.scss'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
+import Axios from "axios";
+import { Alert } from "antd"
+import { useContext } from 'react';
+import { UserContext } from '../../utils/usercontext';
+
 
 const LoginForm = (props) => {
     const history = useHistory();
-    const onFinish = values => {
-        console.log('Received values of form: ', values);
-        const isValidLogin = true;
+    const [errors, setErrors] = useState(null);
+    const {user, setUser} = useContext(UserContext);
 
-        //Navigate to mapview page if valid
-        if(isValidLogin){
-            history.push("/events");
-        }
-        
+    const onFinish = values => {
+
+        Axios.post('http://localhost:4000/users/login', values).then(res=>{
+            const user = {
+                id: res.data.id,
+                name: res.data.name,
+                email: res.data.email
+            }
+            const data = {
+                authenticated: true,
+                userData: user
+            }
+            setUser(user);
+            history.push('/events')
+        }).catch(err => {
+            if(err.response){
+                console.log(err.response)
+            }
+        })        
     };
+
+    // const handleAuth = () =>{
+    // Axios.get("http://localhost:4000/dashboard", {withCrendentials:true}).then(res=>{
+    //     console.log(res)
+    // }).catch(err => {
+    //     if(err.response){
+    //         console.log(err.response.data)
+    //     }
+    // })
+    // }
     return (
         <div className="login-container">
             <div className="login-div">
@@ -64,6 +92,9 @@ const LoginForm = (props) => {
                             </Link>
                         </div>
                     </Form>
+                    {errors ? errors.map(error=>
+                         <Alert className="alert" key={error.message} message={error.message} type="error" showIcon />
+                    ) : null  }
                 </div>
             </div>
     )
