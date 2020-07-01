@@ -1,18 +1,21 @@
 import React, {useState} from 'react';
 import './signup.scss'
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Axios from "axios";
-import { useHistory } from "react-router-dom";
-import { Alert } from "antd";
+
 const SignUpForm = (props) => {
-    const history = useHistory();
+    //Used for storing errors to display alerts
     const [errors, setErrors] = useState(null);
+    //Used for storing successful registration to display success alert
     const [signUpSuccess, setSignUpSuccess] = useState(false)
+    //On form submit
     const onFinish = values => {
+        //First clear errors
         setErrors(null)
         setSignUpSuccess(false)
+        //If successful registration, set state
         Axios.post('http://localhost:4000/users/register', values).then(res=>{
             setSignUpSuccess(true);
         }).catch(err => {
@@ -60,7 +63,7 @@ const SignUpForm = (props) => {
                         <div className="div-footer">
                             Already have an account?
                             <Link to="/login"  className="link">
-                                <a href="/">Log In</a>
+                                Log In
                             </Link>
                         </div>
                     </Form>
