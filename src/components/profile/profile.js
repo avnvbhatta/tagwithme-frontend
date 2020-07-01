@@ -3,8 +3,12 @@ import "./profile.scss"
 import * as Vibrant from 'node-vibrant'
 import { getVibrantColors } from "../../utils/utils";
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import MessageButton from '../button/message';
+import { useContext } from "react";
+import { UserContext } from "../../utils/usercontext";
 
 const Profile = (props) => {
+    const {user} = useContext(UserContext);
     return ( 
         <div>
             <div className="profileContainer">
@@ -13,7 +17,7 @@ const Profile = (props) => {
                         <img  src={"./abhinav.png"} alt=""/>
                     </div>
                     <div className="userDetails">
-                        <div className="userName">Binish Koirala</div>
+                        <div className="userName">{`${user.id} ${user.name} ${user.email}`}</div>
                         <div className="userLocation">
                             <EnvironmentOutlined />
                             <div>Des Moines, IA</div>
@@ -25,7 +29,7 @@ const Profile = (props) => {
                             <InstagramOutlined className="userSocialIcons"/>
                         </div>
                         <div className="messageUser">
-                            <button>Message</button>
+                            <MessageButton />
                         </div>
                     </div>
                 </div>
