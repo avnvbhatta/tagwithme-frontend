@@ -32,7 +32,8 @@ function App() {
   //Check if the session is still active or not
   useEffect(() => {
     Axios.get('http://localhost:4000/login-status').then(res=>{
-      setIsLoggedIn(true)
+      setIsLoggedIn(res.data.isAuthenticated)
+      setUser(res.data.userData)
       }).catch(err => {
           if(err.response){
               console.log(err.response)
