@@ -5,11 +5,14 @@ import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Axios from "axios";
 import { UserContext } from '../../utils/usercontext';
+import { LoggedInContext } from '../../utils/loggedincontext';
 
 
 const LoginForm = (props) => {
     //method to update context value of user
     const {setUser} = useContext(UserContext);
+    //method to update if user is logged in
+    const {setIsLoggedIn} = useContext(LoggedInContext);
     //method to navigate to other pages
     const history = useHistory();
     //states for errors during API calls
@@ -20,7 +23,6 @@ const LoginForm = (props) => {
         //API call to users endpoint. Gets user info, 
         //stores it in global context and navigates to /home
         Axios.post('http://localhost:4000/users/login', values).then(res=>{
-            console.log(res)
             const user = {
                 id: res.data.id,
                 name: res.data.name,
@@ -31,6 +33,7 @@ const LoginForm = (props) => {
                 userData: user
             }
             setUser(data);
+            setIsLoggedIn(true);
             history.push('/home')
         }).catch(err => {
             if(err.response){
