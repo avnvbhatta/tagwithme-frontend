@@ -48,7 +48,8 @@ const Sidebar = (props) => {
         Axios.get('http://localhost:4000/logout').then(res=>{
             setUser(null);
             setIsLoggedIn(false);
-            history.push('/login')
+            setSelectedKey('/home');
+            history.push('/login');
         }).catch(err => {
             
             if(err.response){
