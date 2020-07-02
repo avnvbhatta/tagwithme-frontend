@@ -18,7 +18,7 @@ const Profile = (props) => {
                         <img  src={"./abhinav.png"} alt=""/>
                     </div>
                     <div className="userDetails">
-                        {user ? <div className="userName">{`${user.userData.id} ${user.userData.name} ${user.userData.email}`}</div> : <Space size="middle"><Spin /></Space>}
+                        {user ? <div className="userName">{`${user.id} ${user.name} ${user.email}`}</div> : <Space size="middle"><Spin /></Space>}
                         
                         <div className="userLocation">
                             <EnvironmentOutlined />
