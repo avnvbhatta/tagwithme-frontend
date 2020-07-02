@@ -5,6 +5,7 @@ import "./profile.scss"
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import MessageButton from '../button/message';
 import { UserContext } from "../../utils/usercontext";
+import { Spin, Space } from 'antd';
 
 const Profile = (props) => {
     //Get global user from context to display data
@@ -17,7 +18,8 @@ const Profile = (props) => {
                         <img  src={"./abhinav.png"} alt=""/>
                     </div>
                     <div className="userDetails">
-                        <div className="userName">{`${user.userData.id} ${user.userData.name} ${user.userData.email}`}</div>
+                        {user ? <div className="userName">{`${user.userData.id} ${user.userData.name} ${user.userData.email}`}</div> : <Space size="middle"><Spin /></Space>}
+                        
                         <div className="userLocation">
                             <EnvironmentOutlined />
                             <div>Des Moines, IA</div>
