@@ -13,6 +13,7 @@ import {
     LogoutOutlined
   } from '@ant-design/icons';
 import { UserContext } from '../../utils/usercontext';
+import { LoggedInContext } from '../../utils/loggedincontext';
 
 const { Sider } = Layout;
 
@@ -21,6 +22,8 @@ const Sidebar = (props) => {
     const history = useHistory();
     //To null global user context on logout button clicked
     const {setUser} = useContext(UserContext);
+    //To set logged in flag as false when logout button clicked
+    const {setIsLoggedIn} = useContext(LoggedInContext);
     //State of sidebar collapse
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = collapsed => {
@@ -44,6 +47,7 @@ const Sidebar = (props) => {
     const handleLogOut = () =>{
         Axios.get('http://localhost:4000/logout').then(res=>{
             setUser(null);
+            setIsLoggedIn(false);
             history.push('/login')
         }).catch(err => {
             
