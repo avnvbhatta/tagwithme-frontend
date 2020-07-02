@@ -23,17 +23,8 @@ const LoginForm = (props) => {
         //API call to users endpoint. Gets user info, 
         //stores it in global context and navigates to /home
         Axios.post('http://localhost:4000/users/login', values).then(res=>{
-            const user = {
-                id: res.data.id,
-                name: res.data.name,
-                email: res.data.email
-            }
-            const data = {
-                authenticated: true,
-                userData: user
-            }
-            setUser(data);
-            setIsLoggedIn(true);
+            setUser(res.data.userData);
+            setIsLoggedIn(res.data.isAuthenticated);
             history.push('/home')
         }).catch(err => {
             if(err.response){
