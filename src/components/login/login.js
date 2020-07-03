@@ -17,12 +17,12 @@ const LoginForm = (props) => {
     const history = useHistory();
     //states for errors during API calls
     const [errors, setErrors] = useState(null);
-     
     //On form submit
     const onFinish = values => {
         //API call to users endpoint. Gets user info, 
         //stores it in global context and navigates to /home
-        Axios.post('http://localhost:4000/users/login', values).then(res=>{
+        
+        Axios.post(process.env.REACT_APP_API_LOGIN_ENDPOINT, values).then(res=>{
             setUser(res.data.userData);
             setIsLoggedIn(res.data.isAuthenticated);
             history.push('/home')
@@ -65,7 +65,7 @@ const LoginForm = (props) => {
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
-                                <a className="login-form-forgot" href="/">
+                                <a className="login-form-forgot link" href="/">
                                     Forgot password?
                                 </a>
                             </div>

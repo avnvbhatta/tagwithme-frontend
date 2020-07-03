@@ -16,7 +16,7 @@ const SignUpForm = (props) => {
         setErrors(null)
         setSignUpSuccess(false)
         //If successful registration, set state
-        Axios.post('http://localhost:4000/users/register', values).then(res=>{
+        Axios.post(process.env.REACT_APP_API_REGISTER_ENDPOINT, values).then(res=>{
             setSignUpSuccess(true);
         }).catch(err => {
             if(err.response){

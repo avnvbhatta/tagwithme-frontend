@@ -11,7 +11,7 @@ const MapView = (props) => {
 
     useEffect(() => {    
       if(events){
-        mapboxgl.accessToken = "pk.eyJ1IjoiYXZudmJoYXR0YSIsImEiOiJja2JyOXRjancxNGthMndsbTE4dDNrdDB0In0.-CLS7_4DVmpgROSDPOoltA";
+        mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 
         const initializeMap = ({ setMap, mapContainer }) => {
         const map = new mapboxgl.Map({

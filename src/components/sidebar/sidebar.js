@@ -45,7 +45,7 @@ const Sidebar = (props) => {
 
     //Remove session details and set global user context to null
     const handleLogOut = () =>{
-        Axios.get('http://localhost:4000/logout').then(res=>{
+        Axios.get(process.env.REACT_APP_API_LOGOUT_ENDPOINT).then(res=>{
             setUser(null);
             setIsLoggedIn(false);
             setSelectedKey('/home');

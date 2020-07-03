@@ -51,7 +51,7 @@ const EventsView = () => {
         const getTicketMasterEvents = async () => {
           const response = await axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
               params: {
-                apikey: "LMX62etGfMGogQNGUjnr9Dh2yvtQ88sI",
+                apikey: process.env.TICKETMASTER_API_KEY,
                 geoPoint: Math.round(coordinates.latitude)+","+Math.round(coordinates.longitude),
                 size: 100
               }
