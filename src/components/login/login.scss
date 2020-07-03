@@ -7,6 +7,7 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    text-align: center;
     transform: translate(-50%, -50%);
     .login-div {
         width: 420px;
@@ -25,9 +26,9 @@
                 justify-content: space-between;
                 a {
                     text-decoration: underline;
-                    color: gray;
+                    color: dodgerblue;
                     &:hover {
-                        color: green;
+                        color: lightskyblue;
                     }
                 }
 
@@ -38,7 +39,7 @@
             }
             .login-form-button {
                 cursor: pointer;
-                background-color: blue;
+                background-color: #108ee9;
                 border: none;
                 width: 50%;
                 height: 36px;
@@ -48,7 +49,7 @@
                 box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
                 &:enabled {
                     &:hover {
-                        background-color: lightblue;
+                        background-color:  #69b7ff;
                         span {
                             padding-right: 25px;
                             &:after {
@@ -91,12 +92,12 @@
             padding: 20px 0px 30px;
             color: black;
             a {
-                color: lightblue;
+                color: dodgerblue;
                 font-weight: bold;
                 padding: 0px 5px;
                 text-decoration: underline;
                 &:hover {
-                    color: blue;
+                    color: lightskyblue;
                 }
             }
         }
