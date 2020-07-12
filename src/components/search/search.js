@@ -4,13 +4,13 @@ import { Input, AutoComplete } from 'antd';
 import "./search.scss"
 import axios from "axios";
 import { SearchOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import {connect} from "react-redux";
 
 
 const Search = (props) => {
   const [options, setOptions] = useState([]);
   const [cityList, setCityList] = useState([]);
   const [cityListLoaded, setCityListLoaded] = useState(false);
-  const [searchedCoordinates, setsearchedCoordinates] = props.searchedCoordinates;
 
   
   const onSearch = async searchText => {
@@ -20,7 +20,7 @@ const Search = (props) => {
 
         const response = await axios.get(locationAutoCompleteURL, {
             params: {
-            access_token: "pk.eyJ1IjoiYXZudmJoYXR0YSIsImEiOiJja2JyOXRjancxNGthMndsbTE4dDNrdDB0In0.-CLS7_4DVmpgROSDPOoltA",
+            access_token: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
             limit: 5,
             country: "US" //can change country here later
             }
@@ -39,8 +39,10 @@ const Search = (props) => {
     }       
     };
 
-    const onSelect = (city, coordinates) => {
-        setsearchedCoordinates(coordinates);
+    const onSelect = (city, results) => {
+        props.isNewPlace(true);
+        props.setLat(results.coordinates[1]);
+        props.setLng(results.coordinates[0]);
     };
 
 
@@ -60,4 +62,12 @@ const Search = (props) => {
   );
 };
 
-export default Search;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLat: (res) => dispatch({type: 'SET_LAT', val:res}),
+    setLng: (res) => dispatch({type: 'SET_LNG', val:res}),
+    isNewPlace: (isNewBool) => dispatch({type:'SET_NEW_PLACE', val:isNewBool})
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Search);

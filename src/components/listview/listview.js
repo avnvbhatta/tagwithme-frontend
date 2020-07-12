@@ -3,15 +3,17 @@ import 'antd/dist/antd.css';
 import { List, Space } from 'antd';
 import {  DollarTwoTone, CalendarTwoTone, CarTwoTone } from '@ant-design/icons';
 import InterestedButton from '../button/interested';
+import {connect} from "react-redux"
 
 const ListView = (props) =>{
-    const [events] = props.events;
     const IconText = ({ icon, text }) => (
         <Space>
           {React.createElement(icon)}
           {text}
         </Space>
       );
+
+      console.log(props.events)
     
     return(
         <List
@@ -23,7 +25,7 @@ const ListView = (props) =>{
             },
             pageSize: 10,
             }}
-            dataSource={events}
+            dataSource={props.events}
             
             renderItem={event => (
             <List.Item
@@ -57,5 +59,11 @@ const ListView = (props) =>{
     )
 }
 
+const mapStateToProps = (state) =>{
+    return {
+        events: state.events
+    }
+}
 
-export default ListView;
+
+export default connect(mapStateToProps)(ListView);

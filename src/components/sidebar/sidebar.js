@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
@@ -12,18 +12,13 @@ import {
     SlackOutlined,
     LogoutOutlined
   } from '@ant-design/icons';
-import { UserContext } from '../../utils/usercontext';
-import { LoggedInContext } from '../../utils/loggedincontext';
+import {connect} from "react-redux";
 
 const { Sider } = Layout;
 
 
 const Sidebar = (props) => {
     const history = useHistory();
-    //To null global user context on logout button clicked
-    const {setUser} = useContext(UserContext);
-    //To set logged in flag as false when logout button clicked
-    const {setIsLoggedIn} = useContext(LoggedInContext);
     //State of sidebar collapse
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = collapsed => {
@@ -46,8 +41,7 @@ const Sidebar = (props) => {
     //Remove session details and set global user context to null
     const handleLogOut = () =>{
         Axios.get(process.env.REACT_APP_API_LOGOUT_ENDPOINT).then(res=>{
-            setUser(null);
-            setIsLoggedIn(false);
+            props.logOut();
             setSelectedKey('/home');
             history.push('/login');
         }).catch(err => {
@@ -86,5 +80,11 @@ const Sidebar = (props) => {
             </Sider>
     );
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        logOut: (response) => dispatch({type: 'LOG_OUT'})
+    }
+}
  
-export default withRouter(Sidebar);
+export default connect(null, mapDispatchToProps)(withRouter(Sidebar));

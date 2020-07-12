@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getCurrentPosition } from "../../utils/utils";
 import "./eventsview.scss";
 import axios from "axios";
 import Search from "../search/search"
@@ -8,129 +7,111 @@ import MapView from '../mapview/mapview';
 import { Tabs } from 'antd';
 import { UnorderedListOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { connect } from "react-redux";
+import { filterTicketMasterEvents } from "../../utils/utils"
 
 const { TabPane } = Tabs;
 
+
+const EventsView = (props) => {
   
-const EventsView = () => {  
-    //Initial coordinates for displaying map
-    const [coordinates, setCoordinates] = useState(null);
-
-    //Set state based on events fetched from TicketMaster
-    const [events, setEvents] = useState(null);
-
-    //Set map coordinates based on search
-    const [searchedCoordinates, setSearchedCoordinates] = useState(null);
-
-    //Hook to get current user coordinates
-    //Defaults to NYC coordinates if user denies permission to locate
-    useEffect(() => {    
-      getCurrentPosition()
-      .then(res =>{
-          const {coords} = res;
-          const {longitude, latitude} = coords;
-          return {longitude: longitude, latitude: latitude}
-          
-        })
-      .then((c) =>
-          {
-            setCoordinates(c);
-          }
-      )
-      .catch(e=>{
-        console.log('error', e);
-        setCoordinates({longitude: -73.935242, latitude: 40.730610}); //nyc geo location
-      })
+  //hook to get user interested event to highlight already interested events
+  useEffect(() => { 
+    if(props.isLoggedIn){
+      const getInterestedEvents = async () =>{
+        let res = await axios.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.userData.id}`);
+        const interestedEvents = await res.data;
+          let interestedSet = new Set();
+          interestedEvents.map(event => {
+            interestedSet.add(event.eventid);
+          })  
+          props.setInterestedEvents(interestedSet);
+      }
+      getInterestedEvents();
       
-    }, []);
+    }
+   
+}, [props.isLoggedIn]);
 
-
-    //Get events from ticketmaster
-    useEffect(() => {    
-      if(coordinates){
+  //Get events from ticketmaster
+  useEffect(() => {
+    props.setEvents([])
+    try {
+      if (props.lat && props.lng) {
         const getTicketMasterEvents = async () => {
           const response = await axios.get('https://app.ticketmaster.com/discovery/v2/events.json', {
-              params: {
-                apikey: process.env.TICKETMASTER_API_KEY,
-                geoPoint: Math.round(coordinates.latitude)+","+Math.round(coordinates.longitude),
-                size: 100
-              }
-            });
-            const eventsRes = await response.data._embedded.events;
-            let eventsArray = []
-            eventsRes.map(event => {
-              try {
-                //Only store required details from ticketmaster response
-                let eventInfo = {
-                  id: event.id === undefined ? "" : event.id,
-                  name: event.name === undefined ? "" : event.name,
-                  classification: event.classification === undefined ? [] : {
-                    segment: event.classifications[0].segment.name,
-				            genre: event.classifications[0].genre.name
-                  },
-                  date: {
-                    startTime: event.dates.start.localTime === undefined ? "" : moment(event.dates.start.localTime, 'HH:mm:ss').format("hA"),
-                    startDate: event.dates.start.localDate === undefined ? "" : moment(event.dates.start.localDate ).format("ddd, MMM Do, YYYY"),
-                  },
-                  images: event.images === undefined ? [] : event.images,
-                  url: event.url === undefined ? "" : event.url,
-                  venue: event._embedded.venues[0].name === undefined ? "" : event._embedded.venues[0].name,
-                  distance: event._embedded.venues[0].distance === undefined ? "" : `${event._embedded.venues[0].distance} miles away`,
-                  address: event._embedded.venues[0].address.line1 === undefined ? "" : event._embedded.venues[0].address.line1,
-                  city: event._embedded.venues[0].city === undefined ? "" : event._embedded.venues[0].city,
-                  state: event._embedded.venues[0].state === undefined ? {} : event._embedded.venues[0].state,
-                  location: event._embedded.venues[0].location === undefined ? {latitude: -70, longitude: 40} : event._embedded.venues[0].location,
-                  parking: event._embedded.venues[0].parkingDetail === undefined ? "" : event._embedded.venues[0].parkingDetail,
-                  priceRange: event.priceRanges === undefined ? "" :  `$${event.priceRanges[0].min} - $${event.priceRanges[0].max}`,
-                  postalCode: event._embedded.venues[0].postalCode === undefined ? "" : event._embedded.venues[0].postalCode
-                }
-                eventsArray.push(eventInfo);
-                
-              } catch (error) {
-                console.log('error', error)
-              }
-              
-            })
-            setEvents(eventsArray);            
+            params: {
+              apikey: process.env.REACT_APP_TICKETMASTER_API_KEY,
+              geoPoint: Math.round(props.lat) + "," + Math.round(props.lng),
+              radius: 100,
+              size: 3
+            }
+          });
+          const eventsRes = await response.data._embedded.events;
+          const { eventsArray, geoJSONFeatureArray } = filterTicketMasterEvents(eventsRes, props.interestedEvents);
+          // console.log();
+          props.setEvents(eventsArray);
+          props.setGeoJSONFeatures(geoJSONFeatureArray);
         }
         getTicketMasterEvents();
       }
-    }, [coordinates]);
+    }
+    catch (error) {
+      console.log("Encountered error while fetching events", error)
+    }
+  }, [props.interestedEvents, props.lng]);
 
-    //Set coordinates based on search
-    useEffect(() => {
-      if(searchedCoordinates !== null){
-        setCoordinates({longitude: searchedCoordinates.coordinates[0], latitude: searchedCoordinates.coordinates[1]})
-      }
-    }, [searchedCoordinates]);
 
-    return (<div className="eventsContainer">
-        <Search className="searchBar" searchedCoordinates={[searchedCoordinates, setSearchedCoordinates]}/>
-        <Tabs defaultActiveKey="1" >
-          <TabPane 
-            tab={
-              <span>
-                <EnvironmentOutlined />
+
+  return (<div className="eventsContainer">
+    <Search className="searchBar" />
+    <Tabs defaultActiveKey="1" >
+      <TabPane
+        tab={
+          <span>
+            <EnvironmentOutlined />
                 View On A Map
               </span>
-            }
-            key="1"
-          >
-            {events ? <MapView events={[events, setEvents]} coordinates={[coordinates, setCoordinates]}/> : <LoadingOutlined />}
-          </TabPane>
-          <TabPane
-            tab={
-              <span>
-                <UnorderedListOutlined />
+        }
+        key="1"
+      >
+        <MapView />
+      </TabPane>
+      <TabPane
+        tab={
+          <span>
+            <UnorderedListOutlined />
                 View In A List
               </span>
-            }
-            key="2"
-          >
-            {events ? <ListView events={[events, setEvents]}/> : <LoadingOutlined />}
-          </TabPane>
-        </Tabs>
-      </div>)  
-  };
- 
-export default EventsView;
+        }
+        key="2"
+      >
+        <ListView />
+      </TabPane>
+    </Tabs>
+  </div>)
+};
+
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.isLoggedIn,
+    userData: state.userData,
+    lat: state.lat,
+    lng: state.lng,
+    events: state.events,
+    interestedEvents: state.interestedEvents,
+    geoJSONData: state.geoJSONData
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    setLat: (response) => dispatch({type:'SET_LAT', val:response}),
+    setLng: (response) => dispatch({type:'SET_LNG', val:response}),
+    setEvents: (response) => dispatch({type:'SET_EVENTS', val:response}),
+    setInterestedEvents: (response) => dispatch({type:'SET_INTERESTED_EVENTS', val:response}),
+    setGeoJSONFeatures: (geoJSONFeatureArray) => dispatch({type:'SET_GEOJSON_DATA', val:geoJSONFeatureArray})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventsView);

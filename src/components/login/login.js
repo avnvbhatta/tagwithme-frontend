@@ -4,15 +4,9 @@ import './login.scss'
 import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Axios from "axios";
-import { UserContext } from '../../utils/usercontext';
-import { LoggedInContext } from '../../utils/loggedincontext';
-
+import {connect} from "react-redux";
 
 const LoginForm = (props) => {
-    //method to update context value of user
-    const {setUser} = useContext(UserContext);
-    //method to update if user is logged in
-    const {setIsLoggedIn} = useContext(LoggedInContext);
     //method to navigate to other pages
     const history = useHistory();
     //states for errors during API calls
@@ -23,8 +17,7 @@ const LoginForm = (props) => {
         //stores it in global context and navigates to /home
         
         Axios.post(process.env.REACT_APP_API_LOGIN_ENDPOINT, values).then(res=>{
-            setUser(res.data.userData);
-            setIsLoggedIn(res.data.isAuthenticated);
+            props.logIn(res.data)
             history.push('/home')
         }).catch(err => {
             if(err.response){
@@ -89,4 +82,11 @@ const LoginForm = (props) => {
     )
 }
  
-export default LoginForm;
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        logIn: (response) => dispatch({type: 'USER_LOGIN' , val:response}),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm);
