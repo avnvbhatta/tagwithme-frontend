@@ -6,9 +6,10 @@ import ListView from '../listview/listview';
 import MapView from '../mapview/mapview';
 import { Tabs } from 'antd';
 import { UnorderedListOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import { connect } from "react-redux";
 import { filterTicketMasterEvents } from "../../utils/utils"
+import axiosForAPI from "../../utils/axiosForAPI"
+
 
 const { TabPane } = Tabs;
 
@@ -19,7 +20,7 @@ const EventsView = (props) => {
   useEffect(() => { 
     if(props.isLoggedIn){
       const getInterestedEvents = async () =>{
-        let res = await axios.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.userData.id}`);
+        let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.userData.id}`);
         const interestedEvents = await res.data;
           let interestedSet = new Set();
           interestedEvents.map(event => {
@@ -49,7 +50,6 @@ const EventsView = (props) => {
           });
           const eventsRes = await response.data._embedded.events;
           const { eventsArray, geoJSONFeatureArray } = filterTicketMasterEvents(eventsRes, props.interestedEvents);
-          // console.log();
           props.setEvents(eventsArray);
           props.setGeoJSONFeatures(geoJSONFeatureArray);
         }

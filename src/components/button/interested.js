@@ -2,8 +2,8 @@ import React, {useContext} from 'react';
 import "./interested.scss";
 import { Button } from 'antd';
 import { StarOutlined } from '@ant-design/icons';
-import Axios from "axios";
 import {connect} from "react-redux";
+import axiosForAPI from "../../utils/axiosForAPI"
 
 
 const InterestedButton = (props) => {
@@ -14,7 +14,7 @@ const InterestedButton = (props) => {
             userId: props.userData.id
         }
         
-        let res = await Axios.post(process.env.REACT_APP_API_CREATE_INTERESTED_EVENT_ENDPOINT, data);
+        let res = await axiosForAPI.post(process.env.REACT_APP_API_CREATE_INTERESTED_EVENT_ENDPOINT, data);
         console.log(res);
 
     }

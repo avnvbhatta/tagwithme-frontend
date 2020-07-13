@@ -1,4 +1,5 @@
 const initialState = {
+    isAuthenticating: true,
     isLoggedIn: false, //flag to see if user is logged in
     userData: {}, //user data that contains id, name and email
     lat: 40.730610, //default NYC latitude
@@ -18,6 +19,7 @@ const reducer = (state = initialState, action) =>{
     if(action.type === 'CHECK_USER_LOGGED_IN' || action.type === 'USER_LOGIN'){
         newState.isLoggedIn = action.val.isAuthenticated;
         newState.userData = action.val.userData;
+        newState.isAuthenticating = false;
     }
 
     if(action.type === 'SET_NEW_PLACE'){
@@ -27,6 +29,7 @@ const reducer = (state = initialState, action) =>{
     if(action.type === 'USER_LOG_OUT'){
         newState.isLoggedIn = false;
         newState.userData = {};
+        localStorage.removeItem('jwt');
     }
 
     if(action.type === 'SET_LAT'){

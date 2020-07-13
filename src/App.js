@@ -11,28 +11,36 @@ import Messages from './components/messages/messages';
 import Notifications from './components/notifications/notifications';
 import ProtectedRoute from './utils/protectedroute';
 import { useEffect } from 'react';
-import Axios from "axios";
-import {connect} from "react-redux"
+import axios from "axios";
+import {connect} from "react-redux";
 
 const { Content } = Layout;
 
-
 const App = (props) => {
-  //Check if the session is still active or not
+  const storedJWT = localStorage.getItem('jwt');
   useEffect(() => {
-    Axios.get(process.env.REACT_APP_API_LOGIN_STATUS_ENDPOINT).then(res=>{
-      console.log(res.data)
+    if(storedJWT){
+      const axiosForAPI = axios.create({
+        headers: {
+            Authorization: `Bearer ${storedJWT}`
+        }
+      })  
+      
+      axiosForAPI.get(process.env.REACT_APP_API_LOGIN_STATUS_ENDPOINT).then(res=>{
         props.checkLoggedIn(res.data);
+  
       }).catch(err => {
           if(err.response){
               console.log(err.response)
           }
       }) 
-  }, [])
+    }
+    
+  }, [storedJWT])
 
   //Wrapping the parent layout with UserContext.Provider so that
   //the components within the UserContext.Provider will have access to providedUser
-  return (
+   return (
     <div className="App">
       <BrowserRouter>
           <Layout>
@@ -49,11 +57,11 @@ const App = (props) => {
                     <Route path="/signup" exact > 
                       {props.isLoggedIn ? <Redirect to='/home' /> : <SignUpForm/>}
                     </Route>
-                    <ProtectedRoute path="/profile" component={Profile} />
-                    <ProtectedRoute path="/home" component={EventsView} />
-                    <ProtectedRoute path="/events" component={EventsView} />
-                    <ProtectedRoute path="/messages" component={Messages} />
-                    <ProtectedRoute path="/notifications" component={Notifications} />
+                    <ProtectedRoute exact path="/profile" component={Profile} />
+                    <ProtectedRoute exact path="/home"  component={EventsView} />
+                    <ProtectedRoute exact path="/events" component={EventsView} />
+                    <ProtectedRoute exact path="/messages"  component={Messages} />
+                    <ProtectedRoute exact path="/notifications" component={Notifications} />
                 </Switch>
               </Content>
             </Layout>

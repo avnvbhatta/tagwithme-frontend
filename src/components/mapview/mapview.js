@@ -1,11 +1,15 @@
+import ReactDOM from "react-dom";
 import React, { useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import "./mapview.scss";
 import { connect } from "react-redux";
+import Popup from "../popup/popup";
+
 
 const MapView = (props) => {
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
+  const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
 
   useEffect(() => {
     if (props.events) {
@@ -19,9 +23,29 @@ const MapView = (props) => {
         });
 
         map.on("load", () => {
+          console.log('map loaded')
           setMap(map);
           map.resize();      
-       
+
+          map.addSource('points', {
+            'type': 'geojson',
+            'data': props.geoJSONData
+         });
+          map.addLayer({
+              'id': 'points',
+              'type': 'symbol',
+              'source': 'points',
+              'layout': {
+                  // get the icon name from the source's "icon" property
+                  // concatenate the name to get an icon from the style's sprite sheet
+                  'icon-image': ['concat', ['get', 'icon'], '-15'],
+                  // get the title name from the source's "title" property
+                  'text-field': ['get', 'title'],
+                  'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                  'text-offset': [0, 0.6],
+                  'text-anchor': 'top'
+              }
+        });
         });
 
         map.addControl(new mapboxgl.NavigationControl());
@@ -36,51 +60,45 @@ const MapView = (props) => {
           props.setLat(e.coords.latitude);
           props.setLng(e.coords.longitude);
         });
-
+        
         map.on('dragend', function (e) {
           const { lat, lng } = map.getCenter();
           props.setLat(lat);
           props.setLng(lng);
+  
         });
-
+  
         map.on('zoomend', function (e) {
           const { lat, lng } = map.getCenter();
-          console.log(lat, lng)
-          console.log(map.getZoom())
+        });
+    
+        // change cursor to pointer when user hovers over a clickable feature
+        map.on("mouseenter", "points", e => {
+          if (e.features.length) {
+            map.getCanvas().style.cursor = "pointer";
+          }
         });
 
+        // reset cursor to default when user is no longer hovering over a clickable feature
+        map.on("mouseleave", "points", () => {
+          map.getCanvas().style.cursor = "";
+        });
 
-        props.events.map(event=>{
-          //For creating popups
-              // create a HTML element for each popup
-              var el = document.createElement('div');
-              el.className = 'marker';
-              
-  
-              // make a marker for each feature and add to the map
-              new mapboxgl.Marker(el)
-                  .setLngLat([event.location.longitude, event.location.latitude])
-                  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                  .setHTML(
-                  `<div class="popup">
-                    <div class="content">
-                      <div class="left">
-                        <div class="title">${event.name}</div>
-                        <div class="venue">${event.venue}</div>
-                          <div class="address">${event.address},
-                            <br>${event.city.name}, ${event.state.stateCode}, ${event.postalCode}</div>
-                        <div class="distancePrice"><div>${event.distance}</div><div>${event.priceRange}</div></div>
-                      </div>
-                      <div class="right">
-                        <div class="datetime">${event.date.startDate}<br> ${event.date.startTime}</div>
-                      </div>
-                    </div>
-                    <div class="interested"><div>Interested</div></div>
-                  
-                  </div>`))
-                  .addTo(map);
-  
-          })
+        // add popup when user clicks a point
+        map.on("click", "points", e => {
+          if (e.features.length) {
+            const feature = e.features[0];
+            // create popup node
+            const popupNode = document.createElement("div");
+            ReactDOM.render(<Popup feature={feature} />, popupNode);
+            // set popup on map
+            popUpRef.current
+              .setLngLat(feature.geometry.coordinates)
+              .setDOMContent(popupNode)
+              .addTo(map);
+          }
+        });
+
 
         props.isNewPlace(false)
       };
@@ -88,6 +106,13 @@ const MapView = (props) => {
     }
     
   }, [props.isNewLocation]);
+
+  useEffect(()=>{
+    if(map){
+      map.getSource('points').setData(props.geoJSONData);
+    }
+  }, [map, props.lat])
+
 
 
   return (<div>

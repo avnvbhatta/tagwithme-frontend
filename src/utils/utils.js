@@ -3,18 +3,6 @@ import moment from 'moment';
 export const filterTicketMasterEvents = (events, interestedEvents) => {
     let eventsArray = [];
     let geoJSONFeatureArray = [];
-    let geoJSON = {
-            type: "Feature",
-            properties: {
-              "marker-color": "#1890ff",
-              "marker-size": "medium",
-              "marker-symbol": null
-            },
-            geometry: {
-              type: "Point",
-              coordinates: []
-            }
-    };
     events.map(event => {
     try {
         //Only store required details from ticketmaster response
@@ -44,12 +32,20 @@ export const filterTicketMasterEvents = (events, interestedEvents) => {
         }
         eventsArray.push(eventInfo);
 
-        let geoJSONFeatureInfo = {...geoJSON};
-        geoJSONFeatureInfo.properties["marker-symbol"] = 'music';
-        geoJSONFeatureInfo.geometry.coordinates = [parseFloat(event._embedded.venues[0].location.latitude), parseFloat(event._embedded.venues[0].location.longitude)]
-        
-        //console.log(geoJSONFeatureInfo)
-        geoJSONFeatureArray.push(geoJSONFeatureInfo);
+        let geoJSON = {
+            type: 'Feature',
+            properties: {
+                title: event.name || 'Untitled Event',
+                icon: 'harbor',
+                id: event.id || 'bad_id',
+
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [ parseFloat(event._embedded.venues[0].location.longitude), parseFloat(event._embedded.venues[0].location.latitude)]
+            }
+        };
+        geoJSONFeatureArray.push(geoJSON);
 
 
     } catch (error) {

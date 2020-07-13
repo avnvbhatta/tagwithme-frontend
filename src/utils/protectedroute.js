@@ -1,31 +1,54 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import {connect} from "react-redux";
+import React, {useState, useEffect} from 'react';
+import { Route, Redirect, withRouter } from 'react-router-dom';
+import { LoadingOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux'
 
-export const ProtectedRoute = ({component: Component, isLoggedIn, ...rest}) => {
+
+export const ProtectedRoute = ({component, isLoggedIn, isAuthenticating, ...rest}) => {
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        if(isAuthenticating){
+            setLoaded(false);
+        }
+        else{
+            setLoaded(true);
+        }
+    }, [isAuthenticating])
+
+    let ComponentToRender = component;
+    if(!localStorage.getItem('jwt')){
+        return <Redirect
+            to={{
+                pathname: "/login",
+                
+            }}
+        />
+    }
+    if(!loaded){
+        return <LoadingOutlined />
+    }
     return(
-        <Route {...rest} render={
-            (props) => {
-                if(isLoggedIn){
-                    return <Component {...props}/>
-                }else{
-                    return <Redirect to={
-                        {
+        <Route
+            {...rest}
+            render={props =>
+                isLoggedIn ? (
+                    <ComponentToRender {...props} />
+                ) : (
+                    <Redirect
+                        to={{
                             pathname: "/login",
-                            state: {
-                                from: props.location
-                            }
-                        }
-                    }/>
-                }
+                            state: { from: props.location }
+                        }}
+                    />
+                )
             }
-        }/>
+        />
     )
 }
 
-const mapStateToProps = (state) => {
-    return{
-        isLoggedIn: state.isLoggedIn
-    }
-}
-export default connect(mapStateToProps, null)(ProtectedRoute);
+const mapStateToProps  = (state) => ({ 
+    isLoggedIn: state.isLoggedIn,
+    isAuthenticating: state.isAuthenticating
+});
+
+export default connect(mapStateToProps)(withRouter(ProtectedRoute));
