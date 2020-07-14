@@ -22,9 +22,10 @@ const EventsView = (props) => {
       const getInterestedEvents = async () =>{
         let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.userData.id}`);
         const interestedEvents = await res.data;
+
           let interestedSet = new Set();
           interestedEvents.map(event => {
-            interestedSet.add(event.eventid);
+            interestedSet.add(event.id);
           })  
           props.setInterestedEvents(interestedSet);
       }
