@@ -9,7 +9,8 @@ import {
     UserOutlined,
     NotificationOutlined,
     SlackOutlined,
-    LogoutOutlined
+    LogoutOutlined,
+    GlobalOutlined
   } from '@ant-design/icons';
 import {connect} from "react-redux";
 
@@ -54,6 +55,9 @@ const Sidebar = (props) => {
                 <Menu theme="dark" defaultSelectedKeys={"/home"} selectedKeys={selectedKey} mode="inline" onSelect={menuSelect}>
                     <Menu.Item key="/home" icon={<HomeOutlined />}>
                         Home<Link to="/home" />
+                    </Menu.Item>
+                    <Menu.Item key="/feed" icon={<GlobalOutlined />} >
+                        Feed<Link to="/feed" />
                     </Menu.Item>
                     <Menu.Item key="/profile" icon={<UserOutlined />} >
                         Profile<Link to="/profile" />

@@ -13,6 +13,7 @@ import ProtectedRoute from './utils/protectedroute';
 import { useEffect } from 'react';
 import axios from "axios";
 import {connect} from "react-redux";
+import GlobalFeed from './components/globalfeed/globalfeed';
 
 const { Content } = Layout;
 
@@ -62,6 +63,8 @@ const App = (props) => {
                     <ProtectedRoute exact path="/events" component={EventsView} />
                     <ProtectedRoute exact path="/messages"  component={Messages} />
                     <ProtectedRoute exact path="/notifications" component={Notifications} />
+                    <ProtectedRoute exact path="/feed" component={GlobalFeed} />
+
                 </Switch>
               </Content>
             </Layout>
