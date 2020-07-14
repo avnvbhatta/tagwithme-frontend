@@ -1,0 +1,27 @@
+.ant-spin-nested-loading{
+    height: calc(100vh - 170px); 
+    overflow: auto;
+}
+
+
+.ant-list-item{
+
+    .ant-list-item-main{
+
+        display: flex;
+        flex-direction: column;
+    
+        .ant-list-item-meta{
+            order: 1;
+            margin-bottom: 0px;
+        }
+        .interestedBtn{
+            order: 3;
+        }
+        .ant-list-item-action{
+            order: 2;
+            margin: 0px 0px 16px 0px;
+
+        }
+    }
+}

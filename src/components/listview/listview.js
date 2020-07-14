@@ -4,6 +4,7 @@ import { List, Space } from 'antd';
 import {  DollarTwoTone, CalendarTwoTone, CarTwoTone } from '@ant-design/icons';
 import InterestedButton from '../button/interested';
 import {connect} from "react-redux"
+import "./listview.scss";
 
 const ListView = (props) =>{
     const IconText = ({ icon, text }) => (
@@ -13,8 +14,6 @@ const ListView = (props) =>{
         </Space>
       );
 
-      console.log(props.events)
-    
     return(
         <List
             itemLayout="vertical"
@@ -49,7 +48,7 @@ const ListView = (props) =>{
                 description={`${event.venue}, 
                 ${event.address}, ${event.city.name}, ${event.state.stateCode}, ${event.postalCode}`}
                 />
-                <InterestedButton event={event}/>                
+                <InterestedButton className="interestedBtn" event={event}/>                
                 
             </List.Item>
             
