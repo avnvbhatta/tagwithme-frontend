@@ -1,15 +1,11 @@
-import React, { useContext } from "react"
+import React from "react"
 import "./profile.scss"
-// import * as Vibrant from 'node-vibrant'
-// import { getVibrantColors } from "../../utils/utils";
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import MessageButton from '../button/message';
-import { UserContext } from "../../utils/usercontext";
 import { Spin, Space } from 'antd';
+import {connect} from "react-redux";
 
 const Profile = (props) => {
-    //Get global user from context to display data
-    const {user} = useContext(UserContext);
     return ( 
         <div>
             <div className="profileContainer">
@@ -18,7 +14,7 @@ const Profile = (props) => {
                         <img  src={"./abhinav.png"} alt=""/>
                     </div>
                     <div className="userDetails">
-                        {user ? <div className="userName">{`${user.id} ${user.name} ${user.email}`}</div> : <Space size="middle"><Spin /></Space>}
+                        {props.userData ? <div className="userName">{`${props.userData.name}`}</div> : <Space size="middle"><Spin /></Space>}
                         
                         <div className="userLocation">
                             <EnvironmentOutlined />
@@ -41,4 +37,9 @@ const Profile = (props) => {
     );
 }
  
-export default Profile;
+const mapStateToProps = (state) => {
+    return{
+        userData: state.userData
+    }
+}
+export default connect(mapStateToProps)(Profile);
