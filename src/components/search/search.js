@@ -11,6 +11,7 @@ const Search = (props) => {
   const [options, setOptions] = useState([]);
   const [cityList, setCityList] = useState([]);
   const [cityListLoaded, setCityListLoaded] = useState(false);
+  const [searchVal, setSearchVal] = useState('');
 
   
   const onSearch = async searchText => {
@@ -53,9 +54,10 @@ const Search = (props) => {
         className="searchBox" 
         onSelect={(city, coordinates) => onSelect(city, coordinates)}
         onSearch={onSearch}
+        allowClear
       >
-           <Input prefix={<SearchOutlined />} 
-           suffix={<CloseCircleOutlined />} placeholder="Enter an address, neighborhood, city or ZIP code" />
+           <Input prefix={<SearchOutlined />}  allowClear
+            placeholder="Enter an address, neighborhood, city or ZIP code" />
       </AutoComplete>
       
     </>
