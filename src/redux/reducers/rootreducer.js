@@ -57,6 +57,10 @@ const reducer = (state = initialState, action) =>{
         const elementsIndex = newState.events.findIndex(element => element.id == action.val );
         newState.events[elementsIndex] = {...newState.events[elementsIndex], isInterested: !newState.events[elementsIndex].isInterested}
     }
+
+    if(action.type === 'UPLOAD_IMAGE'){
+        newState.userData.imgurl = action.val;
+    }
    
     return newState;
 

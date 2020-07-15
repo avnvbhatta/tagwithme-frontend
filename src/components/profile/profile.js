@@ -4,6 +4,7 @@ import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlin
 import MessageButton from '../button/message';
 import { Spin, Space } from 'antd';
 import {connect} from "react-redux";
+import ImgUpload from "../imgupload/imgupload";
 
 const Profile = (props) => {
     return ( 
@@ -11,7 +12,7 @@ const Profile = (props) => {
             <div className="profileContainer">
                 <div className="userInfo">
                     <div className="userImg" >
-                        <img  src={"./abhinav.png"} alt=""/>
+                        <ImgUpload />
                     </div>
                     <div className="userDetails">
                         {props.userData ? <div className="userName">{`${props.userData.name}`}</div> : <Space size="middle"><Spin /></Space>}

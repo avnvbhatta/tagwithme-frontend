@@ -2,7 +2,7 @@ import React, { createElement, useEffect, useState } from 'react';
 import axiosForAPI from "../../utils/axiosForAPI";
 import { Select, Space, Comment, Tooltip, Avatar  } from 'antd';
 import moment from 'moment';
-import { LoadingOutlined, DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled } from '@ant-design/icons';
+import { LoadingOutlined, DislikeOutlined, LikeOutlined, DislikeFilled, LikeFilled, UserOutlined } from '@ant-design/icons';
 import {connect} from "react-redux";
 import "./globalfeed.scss";
 import InterestedButton from '../button/interested';
@@ -59,6 +59,7 @@ const GlobalFeed = (props) => {
             radius: radius
         }
         axiosForAPI.post(process.env.REACT_APP_API_GET_GLOBAL_FEED_EVENTS_ENDPOINT, data).then(res => {
+            console.log(res.data)
             setGlobalEvents(res.data);
             setIsLoading(false);
         })
@@ -88,11 +89,12 @@ const GlobalFeed = (props) => {
                         key={`${event.timestamp}`}
                         actions={actions}
                         author={event.username}
-                        avatar={
+                        avatar={ 
                         <Avatar
-                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                            alt="Han Solo"
-                        />
+                            src={event.imgurl ? `${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${event.imgurl}` : ""}
+                            icon={event.imgurl ? "" :<UserOutlined />}
+                            alt={event.username}
+                        /> 
                         }
                         content={
                             <div>
@@ -120,6 +122,7 @@ const GlobalFeed = (props) => {
 const mapStateToProps = (state) => {
     return{
         userId: state.userData.id,
+        imgurl: state.userData.imgurl,
         lat: state.lat,
         lng: state.lng
     }

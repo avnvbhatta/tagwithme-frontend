@@ -1,6 +1,7 @@
 .profileContainer{
     display: flex;
     flex-direction: column;
+    padding: 10px;
 
     .userInfo{
         display: flex;
@@ -10,13 +11,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            img{
-                height: 150px;
-                width: 150px;
-                border-radius: 50%;
-                border: 2px solid white;
-            }
             
+            .ant-upload, img{
+                border-radius: 50%;
+            }
+           
             
         }
         .userDetails{
