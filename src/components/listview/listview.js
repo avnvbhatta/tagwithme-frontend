@@ -7,6 +7,7 @@ import {connect} from "react-redux"
 import "./listview.scss";
 
 const ListView = (props) =>{
+
     const IconText = ({ icon, text }) => (
         <Space>
           {React.createElement(icon)}
@@ -27,10 +28,11 @@ const ListView = (props) =>{
             dataSource={props.events}
             
             renderItem={event => (
+            
             <List.Item
                 key={event.id}
                 actions={[
-                    <IconText icon={CalendarTwoTone} text={`${event.date.startDate} @ ${event.date.startTime}`} key="list-vertical-star-o" />,
+                    <IconText icon={CalendarTwoTone} text={`${event.startDate} @ ${event.startTime}`} key="list-vertical-star-o" />,
                     <IconText icon={CarTwoTone} text={`${event.distance}`} key="list-vertical-message" />,
                     <IconText icon={DollarTwoTone} text={`${event.priceRange}`} key="list-vertical-like-o" />,
                     
@@ -39,14 +41,14 @@ const ListView = (props) =>{
                     <img
                     width={272}
                     alt="logo"
-                    src={event.images[0].url}
+                    src={event.images}
                 /> 
                 }
             >
                 <List.Item.Meta
                 title={<a href={event.url}>{event.name}</a>}
                 description={`${event.venue}, 
-                ${event.address}, ${event.city.name}, ${event.state.stateCode}, ${event.postalCode}`}
+                ${event.address}, ${event.city}, ${event.state}, ${event.postalCode}`}
                 />
                 <InterestedButton className="interestedBtn" event={event}/>                
                 

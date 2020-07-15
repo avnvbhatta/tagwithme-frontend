@@ -85,7 +85,7 @@ const GlobalFeed = (props) => {
             <div>
                 {globalEvents.map(event => {
                     return <Comment
-                        key={`${event.eventid}${event.userid}`}
+                        key={`${event.timestamp}`}
                         actions={actions}
                         author={event.username}
                         avatar={
@@ -97,7 +97,7 @@ const GlobalFeed = (props) => {
                         content={
                             <div>
                                 <p>
-                                    Going to {event.eventname} on {event.startdate} at {event.starttime}. 
+                                    Going to {event.name} on {event.startdate} at {event.starttime}. 
                                 </p>
                                 <InterestedButton event={event}/>
                             </div>

@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import "./interested.scss";
-import { Button } from 'antd';
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import {connect} from "react-redux";
 import axiosForAPI from "../../utils/axiosForAPI"
 
 
 const InterestedButton = (props) => {
-    const [isInterested, setIsInterested] = useState(props.event.isInterested);
+    const [isInterested, setIsInterested] = useState(props.event.isinterested);
     const handleClick = async () =>{
         
         if(isInterested){
