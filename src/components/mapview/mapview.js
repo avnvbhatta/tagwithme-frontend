@@ -23,7 +23,6 @@ const MapView = (props) => {
         });
 
         map.on("load", () => {
-          console.log('map loaded')
           setMap(map);
           map.resize();      
 
