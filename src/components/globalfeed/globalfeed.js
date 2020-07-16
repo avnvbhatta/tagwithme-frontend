@@ -6,6 +6,7 @@ import { LoadingOutlined, DislikeOutlined, LikeOutlined, DislikeFilled, LikeFill
 import {connect} from "react-redux";
 import "./globalfeed.scss";
 import InterestedButton from '../button/interested';
+import FollowButton from '../button/follow';
 
 
 const { Option } = Select;
@@ -102,6 +103,8 @@ const GlobalFeed = (props) => {
                                     Going to {event.name} on {event.startdate} at {event.starttime}. 
                                 </p>
                                 <InterestedButton event={event}/>
+                                <FollowButton event={event} />
+
                             </div>
                         }
                         datetime={

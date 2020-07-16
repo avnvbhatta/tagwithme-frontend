@@ -19,9 +19,6 @@ const LoginForm = (props) => {
         Axios.post(process.env.REACT_APP_API_LOGIN_ENDPOINT, values).then(res=>{
             // props.logIn(res.data)
             localStorage.setItem('jwt', res.data.token)
-            props.logIn(res.data)
-            localStorage.getItem('jwt')
-
             history.push('/home')
         }).catch(err => {
             if(err.response){

@@ -20,21 +20,25 @@ const { Content } = Layout;
 const App = (props) => {
   const storedJWT = localStorage.getItem('jwt');
   useEffect(() => {
+    
     if(storedJWT){
-      const axiosForAPI = axios.create({
-        headers: {
-            Authorization: `Bearer ${storedJWT}`
+      const checkLogin = async () => {
+        try {
+          const axiosForAPI = axios.create({
+            headers: {
+                Authorization: `Bearer ${storedJWT}`
+            }
+          }) 
+
+          let loginResponse = await axiosForAPI.get(process.env.REACT_APP_API_LOGIN_STATUS_ENDPOINT);
+          props.checkLoggedIn(loginResponse.data);
+
+        } catch (error) {
+          console.log(error)
         }
-      })  
-      
-      axiosForAPI.get(process.env.REACT_APP_API_LOGIN_STATUS_ENDPOINT).then(res=>{
-        props.checkLoggedIn(res.data);
-  
-      }).catch(err => {
-          if(err.response){
-              console.log(err.response)
-          }
-      }) 
+      }
+       
+      checkLogin();       
     }
     
   }, [storedJWT])
@@ -59,6 +63,7 @@ const App = (props) => {
                       {props.isLoggedIn ? <Redirect to='/home' /> : <SignUpForm/>}
                     </Route>
                     <ProtectedRoute exact path="/profile" component={Profile} />
+                    <ProtectedRoute exact path="/profile/:userid" component={Profile} />
                     <ProtectedRoute exact path="/home"  component={EventsView} />
                     <ProtectedRoute exact path="/events" component={EventsView} />
                     <ProtectedRoute exact path="/messages"  component={Messages} />
