@@ -3,13 +3,16 @@ import { List, Tabs } from 'antd';
 import axiosForAPI from "../../utils/axiosForAPI";
 import {  LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import {connect} from "react-redux"
-import "./followview.scss"
+import "./followview.scss";
+import FollowButton from '../button/follow';
+import FollowList from "../followlist/followlist";
+
 
 const { TabPane } = Tabs;
 const FollowView = (props) => {
 
     const callback = (key) => {
-        console.log(key);
+        // console.log(key);
     }
 
     const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +23,6 @@ const FollowView = (props) => {
     } catch (error) {
         userid = props.userData.id
     }
-    
 
     useEffect(() => {
         axiosForAPI.get(`http://localhost:4000/get-followers/${userid}`).then(res=>{
@@ -32,39 +34,30 @@ const FollowView = (props) => {
                 }
         }) 
 
-    }, [isLoading])
+    }, [isLoading, props.followers, props.following])
 
     return ( 
-        <Tabs defaultActiveKey="1" onChange={callback}>
-            <TabPane tab="Followers" key="followers">
-                {isLoading ? <LoadingOutlined /> : 
-                    <List
-                        dataSource={followData.followers}
-                        renderItem={user => (
-                            <List.Item className="list-item">
-                                {console.log('user', user)}
-                                {user.imgurl ? <img className="follower-img" src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${user.imgurl}`} alt="avatar" /> : <UserOutlined style={{ fontSize: '50px' }}/>}
-                                {user.name}
-                            </List.Item>
-                        )}
-                    />
-                }
-            </TabPane>
-            <TabPane tab="Following" key="following">
-                {isLoading ? <LoadingOutlined /> : 
-                        <List
-                            dataSource={followData.following}
-                            renderItem={user => (
-                                <List.Item className="list-item">
-                                     {console.log('user', user)}
-                                    {user.imgurl ? <img className="follower-img" src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${user.imgurl}`} alt="avatar" /> : <UserOutlined style={{ fontSize: '50px' }}/>}
-                                    {user.name}
-                                </List.Item>
-                            )}
-                        />
-                    }
-            </TabPane>
-        </Tabs>
+        
+        <div>
+            {isLoading ? <LoadingOutlined /> :
+                <div className="follow-container">
+                    <div className="summary">
+                        <div className="followers">{followData.followers ? followData.followers.length : 0} followers</div>
+                        <div className="following">{followData.following ? followData.following.length : 0} following</div>
+                    </div>
+                    <Tabs className="detail" defaultActiveKey="1" onChange={callback}>
+                        <TabPane tab="Followers" key="followers">
+                            <FollowList data={followData.followers} />
+                        </TabPane>
+                        <TabPane tab="Following" key="following">
+                            <FollowList data={followData.following} />
+                        </TabPane>
+                    </Tabs>
+                </div>
+            }
+            
+        </div>
+        
      );
 }
 
@@ -72,8 +65,15 @@ const mapStateToProps = (state) => {
     return{
         followers: state.userData.followers,
         following: state.userData.following,
-        userData: state.userData
+        userData: state.userData,
+        followingSet: state.userData.followingSet
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setFollowData: (data) => dispatch({type: 'SET_FOLLOW_DATA', val:data})
     }
 }
  
-export default connect(mapStateToProps)(FollowView);
+export default connect(mapStateToProps, mapDispatchToProps)(FollowView);

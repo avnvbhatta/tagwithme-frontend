@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react"
 import "./profile.scss"
-import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined, LoadingOutlined } from '@ant-design/icons';
+import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import MessageButton from '../button/message';
-import { Spin, Space } from 'antd';
+import { Spin, Space, Avatar } from 'antd';
 import {connect} from "react-redux";
 import ImgUpload from "../imgupload/imgupload";
 import axiosForAPI from "../../utils/axiosForAPI";
@@ -11,27 +11,34 @@ import FollowView from "../followview/followview";
 
 const Profile = (props) => {
 
-    const userid = props.match.params.userid || props.userData.id;
-    const ownProfile = props.match.params.userid ? false : true;
+    let userid = null;
+    const isOwnProfile = props.match.params.userid ? false : true;
+    if(isOwnProfile){
+        userid = props.userData.id;
+    }
+    else{
+        userid =  props.match.params.userid; 
+    }
     const [isLoading, setIsLoading] = useState(true);
     const [userData, setUserData] = useState({});
     useEffect(()=>{
-        //If viewing own profile, fetch data from store
-        if(ownProfile){
-            setUserData(props.userData);
-            setIsLoading(false);
-        }
-        //If viewing other's profile, fetch data from DB
-        else{
-            axiosForAPI.get(`http://localhost:4000/users/${userid}`).then(res => {
-                console.log('hit db')
-                console.log(res.data)
+        const getData = async () =>{
+            try {
+                let res = await axiosForAPI.get(`http://localhost:4000/users/${userid}`);
                 setUserData(res.data)
                 setIsLoading(false);
-            })
+            } catch (error) {
+                console.log(error)
+            }
+            
         }
+        getData();
         
-    }, [isLoading])
+    }, [])
+    
+    if(!userData){
+        return <h1>User not found.</h1>
+    }
     return ( 
         <div>
             {
@@ -39,7 +46,8 @@ const Profile = (props) => {
             <div className="profileContainer">
                 <div className="userInfo">
                     <div className="userImg" >
-                        {ownProfile ? <ImgUpload /> : <img src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${userData.imgurl}`} alt="avatar" style={{ width: '100%' }} />}
+                        {isOwnProfile ? <ImgUpload /> : <> {userData.imgurl? <img src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${userData.imgurl}`} alt="avatar"  /> :<Avatar size={64} icon={<UserOutlined />} /> } </>
+                        }
                     </div>
                     <div className="userDetails">
                         {userData ? <div className="userName">{userData.name}</div> : <Space size="middle"><Spin /></Space>}
@@ -54,20 +62,16 @@ const Profile = (props) => {
                             <TwitterOutlined className="userSocialIcons"/>
                             <InstagramOutlined className="userSocialIcons"/>
                         </div>
-                        <div className="follow">
-                            <div className="followers">{userData.followerCount ? userData.followerCount : 0} followers</div>
-                            <div className="following">{userData.followingCount ? userData.followingCount : 0} following</div>
-                        </div>
                         <div className="messageUser">
-                            {ownProfile ? "" : <MessageButton />}
-                            {ownProfile ? "" : <FollowButton followId={props.match.params.userid}/>}
+                            {isOwnProfile && !isLoading? "" : <MessageButton />}
+                            {isOwnProfile && !isLoading? "" : <FollowButton userData={userData} fromProfile={true}/>}
                         </div>
                         
                         
                     </div>
                 </div>
                 <div className="follows">
-                    <FollowView ownProfile={ownProfile} userid={userid}/>
+                    <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
                 </div>
             
         </div>

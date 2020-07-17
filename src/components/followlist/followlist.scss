@@ -1,0 +1,13 @@
+.follower-img-container{
+    display: flex;
+    .follower-img{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+    .username{
+        padding: 0 8px;
+        cursor: pointer;
+    }
+
+}

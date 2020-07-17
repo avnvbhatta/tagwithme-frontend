@@ -7,6 +7,8 @@ import {connect} from "react-redux";
 import "./globalfeed.scss";
 import InterestedButton from '../button/interested';
 import FollowButton from '../button/follow';
+import { useHistory, Link } from "react-router-dom";
+
 
 
 const { Option } = Select;
@@ -15,6 +17,7 @@ const GlobalFeed = (props) => {
     const [radius, setRadius] = useState('5');
     const [isLoading, setIsLoading] = useState(true);
     const [globalEvents, setGlobalEvents] = useState(null);
+    const history = useHistory();
 
     const handleChange = (value) => {
         setRadius(value);
@@ -60,11 +63,12 @@ const GlobalFeed = (props) => {
             radius: radius
         }
         axiosForAPI.post(process.env.REACT_APP_API_GET_GLOBAL_FEED_EVENTS_ENDPOINT, data).then(res => {
-            console.log(res.data)
             setGlobalEvents(res.data);
             setIsLoading(false);
         })
     }, [radius])
+
+        
 
     return ( 
         <div className="globalFeedContainer">
@@ -89,12 +93,13 @@ const GlobalFeed = (props) => {
                     return <Comment
                         key={`${event.timestamp}`}
                         actions={actions}
-                        author={event.username}
+                        author={<Link to={`/profile/${event.userid}`}>{event.username}</Link>}
                         avatar={ 
                         <Avatar
                             src={event.imgurl ? `${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${event.imgurl}` : ""}
                             icon={event.imgurl ? "" :<UserOutlined />}
                             alt={event.username}
+                            onClick={()=> history.push(`/profile/${event.userid}`)}
                         /> 
                         }
                         content={
@@ -103,7 +108,7 @@ const GlobalFeed = (props) => {
                                     Going to {event.name} on {event.startdate} at {event.starttime}. 
                                 </p>
                                 <InterestedButton event={event}/>
-                                <FollowButton event={event} />
+                                <FollowButton event={event} fromGlobal={true}/>
 
                             </div>
                         }
@@ -127,7 +132,9 @@ const mapStateToProps = (state) => {
         userId: state.userData.id,
         imgurl: state.userData.imgurl,
         lat: state.lat,
-        lng: state.lng
+        lng: state.lng,
+        followingSet: state.userData.followingSet,
+        following: state.userData.following
     }
 }
  

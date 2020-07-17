@@ -1,26 +1,75 @@
-import React from 'react';
-import { UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
-import "./follow.scss"
+import React, { useState} from 'react';
+import { UserAddOutlined } from '@ant-design/icons';
+import "./follow.scss";
+import {connect} from "react-redux";
+import axiosForAPI from "../../utils/axiosForAPI";
+
+
 const Follow = (props) => {
+    let id = null;
+    let name = null;
+    let imgurl = null;
+
+    if(typeof props.fromFollowList !== 'undefined' && props.fromFollowList === true){
+        id = props.userData.id;
+        name = props.userData.name;
+        imgurl = props.userData.imgurl;
+    }
+    else if(typeof props.fromGlobal !== 'undefined' && props.fromGlobal === true){
+        id = props.event.userid.toString();
+        name = props.event.username;
+        imgurl = props.event.imgurl;
+    }
+    else if(typeof props.fromProfile !== 'undefined'  && props.fromProfile === true){
+        id = props.userData.id;
+        name = props.userData.name;
+        imgurl = props.userData.imgurl;
+    }
+
+    const [followLabel, setFollowLabel] = useState(null);
+
+    const handleClick = async () =>{
+        const user_id = props.user_id
+        
+        if(props.followingSet.has(parseInt(id))){
+            let res = await axiosForAPI.delete(`http://localhost:4000/follow`, {data: {user_id: user_id, following_id: id}} );
+            props.unfollow(id);
+            setFollowLabel('Follow')
+        }
+        else{
+            let res = await axiosForAPI.post(`http://localhost:4000/follow`, {user_id: user_id, following_id: id});
+            props.follow({id: id, name: name, imgurl: imgurl});
+            setFollowLabel('Following')
+
+        }
+    }
+
     
 
-    const handleClick = () =>{
-        let id = null;
-        try {
-            id = props.event.userid;
-        } catch (error) {
-            id = props.followId;
-        }
-        
-        console.log(id)
+    //Don't render your own follow button 
+    if(id == props.user_id){
+        return <div></div>
     }
     return ( 
         <button className="followBtn"
-        onClick={handleClick}
+            onClick={handleClick}
         >
-          <UserAddOutlined /> Follow
+          <UserAddOutlined /> {props.followingSet.has(parseInt(id)) ? "Following" : "Follow"}
         </button>
     );
 }
  
-export default Follow;
+const mapStateToProps = (state) => {
+    return{
+        followingSet: state.userData.followingSet,
+        user_id: state.userData.id
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        unfollow: (id) => dispatch({type: 'UNFOLLOW', val: id}),
+        follow: (id) => dispatch({type: 'FOLLOW', val: id}),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Follow);

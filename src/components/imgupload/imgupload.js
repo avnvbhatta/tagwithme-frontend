@@ -11,11 +11,7 @@ const ImgUpload = (props) => {
     const [imageUrl, setImageurl] = useState(imgUrlFromDB || null);
 
 
-    function getBase64(img, callback) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-      }
+    
     const handleChange = info => {
         if (info.file.status === 'uploading') {
             setLoading(true)
