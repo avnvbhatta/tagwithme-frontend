@@ -10,25 +10,24 @@ import {connect} from "react-redux";
 const SocketComponent = (props) => {
 
     const [res, setRes] = useState(null);
-    const socket = socketIOClient('ENDPOINT HERE');
+    const socket = socketIOClient(process.env.REACT_APP_SOCKETIO_ENDPOINT);
+    const [newNotificationAlert, setNewNotificationAlert]  = props.newNotificationAlert;
 
     useEffect(()=>{
-        console.log(props.user_id)
-        socket.emit('data', props.user_id)
-        socket.on("FromAPI", data => {
-          console.log("socket response ", data)
-          setRes(data);
-        });
-
-    }, [])
-
-    useEffect(() => {
-        console.log('ue2')
-
-        if(res !== null){
-            message.info("your id is"+res);
+        if(props.user_id){
+            console.log(props.user_id)
+            socket.emit('data', props.user_id)
+            socket.on("FromAPI", data => {
+              setRes(null);
+              setRes(data);
+              setNewNotificationAlert(true);
+            });
         }
-    }, [res])
+       
+
+    }, [props.user_id])
+
+ 
 
     return ( 
         <Fragment>

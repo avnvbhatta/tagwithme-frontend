@@ -41,7 +41,7 @@ const App = (props) => {
       checkLogin();       
     }
     
-  }, [props.jwt])
+  }, [props.jwt, props.isLoggedIn])
 
   //Wrapping the parent layout with UserContext.Provider so that
   //the components within the UserContext.Provider will have access to providedUser

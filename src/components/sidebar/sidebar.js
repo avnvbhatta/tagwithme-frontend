@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
 import { Link, withRouter, useHistory} from 'react-router-dom';
@@ -41,8 +41,15 @@ const Sidebar = (props) => {
             props.logOut();
             history.push('/login')
         }
+        if(e.key === '/notifications'){
+            if(newNotificationAlert){
+                setNewNotificationAlert(false);
+            }
+        }
         setSelectedKey(e.key)
     }
+
+    const [newNotificationAlert, setNewNotificationAlert] = useState(false);
 
      
     //Don't display sidebar on login and signup screens
@@ -66,14 +73,14 @@ const Sidebar = (props) => {
                     <Menu.Item key="/message" icon={<CommentOutlined />} >
                         Messages<Link to="/messages" />
                     </Menu.Item>
-                    <Menu.Item key="/notifications" icon={<NotificationOutlined />} >
-                        Notifications<Link to="/notifications" />  
+                    <Menu.Item key="/notifications" icon={<Badge dot={collapsed && newNotificationAlert} style={{top: '12px'}}><NotificationOutlined /></Badge>} >
+                        {!collapsed && <Link to="/notifications" ><Badge dot={newNotificationAlert} style={{right: '-6px'}}>Notifications</Badge></Link>  }
                     </Menu.Item>
                     <Menu.Item key="logout" icon={<LogoutOutlined />}>
                         Log Out  
                     </Menu.Item>
                 </Menu>
-                {/* <SocketComponent />  */}
+                <SocketComponent newNotificationAlert={[newNotificationAlert, setNewNotificationAlert] }/> 
             </Sider>
     );
 }
