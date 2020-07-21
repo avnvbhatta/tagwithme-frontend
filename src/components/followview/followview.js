@@ -25,7 +25,7 @@ const FollowView = (props) => {
     }
 
     useEffect(() => {
-        axiosForAPI.get(`http://localhost:4000/get-followers/${userid}`).then(res=>{
+        axiosForAPI.get(`${process.env.REACT_APP_API_GET_FOLLOWERS_ENDPOINT}${userid}`).then(res=>{
                 setFollowData({followers: res.data.followers, following: res.data.following});
                 setIsLoading(false);
             }).catch(err => {

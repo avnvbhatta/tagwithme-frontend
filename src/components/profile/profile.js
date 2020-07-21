@@ -22,9 +22,10 @@ const Profile = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userData, setUserData] = useState({});
     useEffect(()=>{
+        console.log('user id from db', props.userData)
         const getData = async () =>{
             try {
-                let res = await axiosForAPI.get(`http://localhost:4000/users/${userid}`);
+                let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_USER_BY_ID_ENDPOINT}${userid}`);
                 setUserData(res.data)
                 setIsLoading(false);
             } catch (error) {

@@ -3,7 +3,7 @@ import { useHistory, Link } from "react-router-dom";
 import './login.scss'
 import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import Axios from "axios";
+import axios from "axios";
 import {connect} from "react-redux";
 
 const LoginForm = (props) => {
@@ -12,20 +12,33 @@ const LoginForm = (props) => {
     //states for errors during API calls
     const [errors, setErrors] = useState(null);
     //On form submit
-    const onFinish = values => {
+    const onFinish = async values => {
         //API call to users endpoint. Gets user info, 
         //stores it in global context and navigates to /home
-        
-        Axios.post(process.env.REACT_APP_API_LOGIN_ENDPOINT, values).then(res=>{
-            // props.logIn(res.data)
-            localStorage.setItem('jwt', res.data.token)
-            history.push('/home')
-        }).catch(err => {
-            if(err.response){
-                console.log(err.response)
-                setErrors(err.response.data)
+
+        try {
+            let loginResponse = await axios.post(process.env.REACT_APP_API_LOGIN_ENDPOINT, values);
+            localStorage.setItem('jwt', loginResponse.data.token);
+            props.logIn(loginResponse.data.token)
+
+            const axiosForAPI = axios.create({
+                headers: {
+                    Authorization: `Bearer ${loginResponse.data.token}`
+                }
+              }) 
+    
+            let checkLoggedInResponse = await axiosForAPI.get(process.env.REACT_APP_API_LOGIN_STATUS_ENDPOINT);
+            if(checkLoggedInResponse.data.isAuthenticated){
+                props.checkLoggedIn(checkLoggedInResponse.data);
+                history.push('/home');
+               
             }
-        })        
+
+        } catch (error) {
+            console.log(error);
+            setErrors([{message: 'Invalid login.'}])
+        }
+            
     };
 
     return (
@@ -86,6 +99,7 @@ const LoginForm = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return{
+        checkLoggedIn: (response) => dispatch({type: 'CHECK_USER_LOGGED_IN' , val:response}),
         logIn: (response) => dispatch({type: 'USER_LOGIN' , val:response}),
     }
 }

@@ -53,6 +53,8 @@ const GlobalFeed = (props) => {
         </span>
         </Tooltip>,
         <span key="comment-basic-reply-to">Reply to</span>,
+
+        
     ];
 
     useEffect(()=>{
@@ -92,8 +94,9 @@ const GlobalFeed = (props) => {
                 {globalEvents.map(event => {
                     return <Comment
                         key={`${event.timestamp}`}
-                        actions={actions}
-                        author={<Link to={`/profile/${event.userid}`}>{event.username}</Link>}
+                        actions={[ ...actions, <InterestedButton event={event}/>,
+                            <FollowButton event={event} fromGlobal={true}/>]}
+                        author={<div><Link to={`/profile/${event.userid}`}>{event.username}</Link></div>}
                         avatar={ 
                         <Avatar
                             src={event.imgurl ? `${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${event.imgurl}` : ""}
@@ -107,8 +110,8 @@ const GlobalFeed = (props) => {
                                 <p>
                                     Going to {event.name} on {event.startdate} at {event.starttime}. 
                                 </p>
-                                <InterestedButton event={event}/>
-                                <FollowButton event={event} fromGlobal={true}/>
+                                {/* <InterestedButton event={event}/> */}
+                                {/* <FollowButton event={event} fromGlobal={true}/> */}
 
                             </div>
                         }

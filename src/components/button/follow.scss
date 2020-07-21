@@ -1,13 +1,14 @@
 .followBtn{
-    background: dodgerblue;
     border-radius: 50px;
     max-width: 150px;
-    border: 0px;
+    border: 2px solid dodgerblue;
     outline: 0px;
-    padding: 8px 25px;
+    padding: 0px 12px;
     cursor: pointer;
     transition: all ease-in-out 0.2s;
-    color: white;
+    color: dodgerblue;
+    font-weight: bold;
+    height: 30px;
     
 
     span{
@@ -15,6 +16,6 @@
     }
 
     &:hover{
-        background: rgb(0, 110, 219);
+        background: rgb(209, 232, 252);
     }
 }

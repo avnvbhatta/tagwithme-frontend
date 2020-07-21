@@ -13,12 +13,17 @@ const initialState = {
     },
     interestedEvents: new Set(),
     isNewLocation: false,
+    jwt: null
 }
 
 const reducer = (state = initialState, action) =>{
     const newState = {...state};
 
-    if(action.type === actiontypes.CHECK_USER_LOGGED_IN || action.type === actiontypes.USER_LOGIN){
+    if(action.type === actiontypes.USER_LOGIN){
+        newState.jwt = action.val;
+        
+    }
+    if(action.type === actiontypes.CHECK_USER_LOGGED_IN){
         newState.isLoggedIn = action.val.isAuthenticated;
         newState.userData = action.val.userData;
         newState.isAuthenticating = false;

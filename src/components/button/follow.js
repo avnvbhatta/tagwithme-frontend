@@ -32,12 +32,12 @@ const Follow = (props) => {
         const user_id = props.user_id
         
         if(props.followingSet.has(parseInt(id))){
-            let res = await axiosForAPI.delete(`http://localhost:4000/follow`, {data: {user_id: user_id, following_id: id}} );
+            let res = await axiosForAPI.delete(process.env.REACT_APP_API_FOLLOW_ENDPOINT, {data: {user_id: user_id, following_id: id}} );
             props.unfollow(id);
             setFollowLabel('Follow')
         }
         else{
-            let res = await axiosForAPI.post(`http://localhost:4000/follow`, {user_id: user_id, following_id: id});
+            let res = await axiosForAPI.post(process.env.REACT_APP_API_FOLLOW_ENDPOINT, {user_id: user_id, following_id: id});
             props.follow({id: id, name: name, imgurl: imgurl});
             setFollowLabel('Following')
 

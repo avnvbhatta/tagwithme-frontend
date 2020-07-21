@@ -13,6 +13,7 @@ import {
     GlobalOutlined
   } from '@ant-design/icons';
 import {connect} from "react-redux";
+import SocketComponent from '../socket/socket';
 
 const { Sider } = Layout;
 
@@ -66,12 +67,13 @@ const Sidebar = (props) => {
                         Messages<Link to="/messages" />
                     </Menu.Item>
                     <Menu.Item key="/notifications" icon={<NotificationOutlined />} >
-                        Notifications<Link to="/notifications" />   
+                        Notifications<Link to="/notifications" />  
                     </Menu.Item>
                     <Menu.Item key="logout" icon={<LogoutOutlined />}>
                         Log Out  
                     </Menu.Item>
                 </Menu>
+                {/* <SocketComponent />  */}
             </Sider>
     );
 }
