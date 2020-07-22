@@ -17,6 +17,7 @@ const ListView = (props) =>{
 
     return(
         <List
+            className="eventlist"
             itemLayout="vertical"
             size="large"
             pagination={{

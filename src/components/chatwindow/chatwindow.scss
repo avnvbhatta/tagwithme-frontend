@@ -1,0 +1,41 @@
+.chat-container{
+    display: flex;
+    flex-direction: column;
+
+    .chat-display{
+        height: 85vh;
+        overflow: auto;
+        justify-self: flex-start;
+
+        .left{
+            justify-content: flex-start;
+            padding-right: 30px;
+            padding-left:5px;
+            div{
+                background: rgb(152, 152, 152);
+                color: white;
+                padding: 8px;
+                border-radius: 10px;
+            }
+        }
+        .right{
+            justify-content: flex-end;
+            padding-left: 30px;
+            padding-right:5px;
+            div{
+                background: dodgerblue;
+                color: white;
+                padding: 8px;
+                border-radius: 10px;
+
+            }
+        }
+
+        
+    }
+
+    .chat-input{
+        justify-self: flex-end;
+        
+    }
+}

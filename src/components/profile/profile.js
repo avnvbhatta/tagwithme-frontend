@@ -63,7 +63,7 @@ const Profile = (props) => {
                             <InstagramOutlined className="userSocialIcons"/>
                         </div>
                         <div className="messageUser">
-                            {isOwnProfile && !isLoading? "" : <MessageButton />}
+                            {isOwnProfile && !isLoading? "" : <MessageButton userData={userData}/>}
                             {isOwnProfile && !isLoading? "" : <FollowButton userData={userData} fromProfile={true}/>}
                         </div>
                         <div className="follows">

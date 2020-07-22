@@ -1,16 +1,15 @@
 import React from 'react';
 import { Fragment, useEffect } from 'react';
 import { useState } from 'react';
-import { message, Button } from 'antd';
 import 'antd/dist/antd.css';
-import socketIOClient from 'socket.io-client';
 import {connect} from "react-redux";
+import socket from "../../utils/socketIO";
+
 
 
 const SocketComponent = (props) => {
 
     const [res, setRes] = useState(null);
-    const socket = socketIOClient(process.env.REACT_APP_SOCKETIO_ENDPOINT);
     const [newNotificationAlert, setNewNotificationAlert]  = props.newNotificationAlert;
 
     useEffect(()=>{
@@ -21,8 +20,11 @@ const SocketComponent = (props) => {
               setRes(data);
               setNewNotificationAlert(true);
             });
+
+            socket.on("FromAPI/message", data => {
+                console.log('from socket message',data)
+              });
         }
-       
 
     }, [props.user_id])
 
