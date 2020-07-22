@@ -15,7 +15,6 @@ const SocketComponent = (props) => {
 
     useEffect(()=>{
         if(props.user_id){
-            console.log(props.user_id)
             socket.emit('data', props.user_id)
             socket.on("FromAPI", data => {
               setRes(null);

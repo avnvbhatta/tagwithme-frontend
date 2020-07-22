@@ -6,6 +6,7 @@
     .userInfo{
         display: flex;
         flex-direction: row;
+        height: 170px;
         
         .userImg{
             display: flex;
@@ -28,7 +29,6 @@
         .userDetails{
             display: flex;
             flex-direction: column;
-            justify-content: center;
             padding-left: 20px;
             
             .userSocial, .userName, .userLocation{

@@ -22,7 +22,6 @@ const Profile = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userData, setUserData] = useState({});
     useEffect(()=>{
-        console.log('user id from db', props.userData)
         const getData = async () =>{
             try {
                 let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_USER_BY_ID_ENDPOINT}${userid}`);
@@ -67,13 +66,15 @@ const Profile = (props) => {
                             {isOwnProfile && !isLoading? "" : <MessageButton />}
                             {isOwnProfile && !isLoading? "" : <FollowButton userData={userData} fromProfile={true}/>}
                         </div>
+                        <div className="follows">
+                            <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
+                        </div>
                         
                         
                     </div>
                 </div>
-                <div className="follows">
-                    <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
-                </div>
+                <div>RANDOM</div>
+               
             
         </div>
         }

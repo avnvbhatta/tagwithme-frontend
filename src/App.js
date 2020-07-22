@@ -21,7 +21,7 @@ const App = (props) => {
   const storedJWT = localStorage.getItem('jwt');
   useEffect(() => {
     
-    if(props.jwt){
+    if(!props.isLoggedIn){
       const checkLogin = async () => {
         try {
           const axiosForAPI = axios.create({
@@ -41,7 +41,7 @@ const App = (props) => {
       checkLogin();       
     }
     
-  }, [props.jwt, props.isLoggedIn])
+  }, [props.isLoggedIn])
 
   //Wrapping the parent layout with UserContext.Provider so that
   //the components within the UserContext.Provider will have access to providedUser

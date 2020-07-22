@@ -1,0 +1,16 @@
+.follow-container{
+    .summary{
+        display: flex;
+
+        .followers, .following, span{
+            cursor: pointer;
+            color: dodgerblue;
+        }
+        *{
+            padding-right: 8px;
+        }
+    }
+
+    
+}
+

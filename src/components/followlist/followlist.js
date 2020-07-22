@@ -12,10 +12,10 @@ const FollowList = (props) => {
 
 
     return ( 
-        <List
+        <List className="list-item"
             dataSource={props.data}
             renderItem={user => (
-                <List.Item className="list-item">
+                <List.Item >
                     <div className="follower-img-container">
                         <div>
                             {user.imgurl ? <img className="follower-img" src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${user.imgurl}`} alt="avatar" /> : <UserOutlined style={{ fontSize: '25px' }}/>}
