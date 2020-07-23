@@ -13,7 +13,6 @@ import moment from 'moment';
 
 const ChatWindow = (props) => {
     const [msg, setMsg] = useState('');
-    const receiverData = props.userData;
     const handleChange = (e) => {
         setMsg(e.target.value);
     }
@@ -30,7 +29,7 @@ const ChatWindow = (props) => {
     useEffect(() => {
         const getMessages = async () => {
             try {
-                let res = await axiosForAPI.post(process.env.REACT_APP_GET_MESSAGES_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: receiverData.id}})
+                let res = await axiosForAPI.post(process.env.REACT_APP_GET_MESSAGES_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: props.receiver_id}})
                 setChatData(res.data);
             } catch (error) {
                 console.log(error);
@@ -47,7 +46,7 @@ const ChatWindow = (props) => {
 
     const sendMsg =  () => {
         try {
-            let res = axiosForAPI.post(process.env.REACT_APP_SEND_MESSAGE_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: receiverData.id, message: msg}})
+            let res = axiosForAPI.post(process.env.REACT_APP_SEND_MESSAGE_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: props.receiver_id, message: msg}})
             setMsg('')
         } catch (error) {
             console.log(error)
@@ -57,7 +56,6 @@ const ChatWindow = (props) => {
     return ( 
         <div className="chat-container">
             <div className="chat-display">
-                {console.log("my chat data", chatData)}
                 <List
                     dataSource={chatData}
                     bordered={false}

@@ -1,0 +1,26 @@
+.messages-container{
+    padding: 10px;
+    height: 100vh;
+    overflow: auto;
+    .list-item{
+        cursor: pointer;;
+        .follower-img{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        .chatTitle{
+            display: flex;
+            flex-direction: row;
+            .userName{
+                font-weight: bold;
+                padding-right: 8px;
+            }
+            .timestamp{
+                color: gray;
+            }
+        }
+    }
+    
+    
+}

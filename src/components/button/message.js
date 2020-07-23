@@ -11,7 +11,6 @@ const MessageButton = (props) => {
 
 
     const showDrawer = () => {
-        console.log(userData)
         setDrawerVisible(true);
       };
     
@@ -35,7 +34,7 @@ const MessageButton = (props) => {
                 visible={drawerVisible}
                 bodyStyle={{padding: '0px'}}
             >
-                <ChatWindow userData={userData}/>
+                <ChatWindow receiver_id={userData.id}/>
             
             </Drawer>
 
