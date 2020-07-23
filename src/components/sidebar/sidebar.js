@@ -80,7 +80,7 @@ const Sidebar = (props) => {
                         Log Out  
                     </Menu.Item>
                 </Menu>
-                {/* <SocketComponent newNotificationAlert={[newNotificationAlert, setNewNotificationAlert] }/>  */}
+                <SocketComponent newNotificationAlert={[newNotificationAlert, setNewNotificationAlert] }/> 
             </Sider>
     );
 }

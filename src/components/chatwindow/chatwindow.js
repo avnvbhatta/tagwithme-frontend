@@ -1,11 +1,15 @@
 import React from 'react';
 import {connect} from "react-redux";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import axiosForAPI from "../../utils/axiosForAPI";
-import { Input, List } from 'antd';
+import { Input, List, Tooltip } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import "./chatwindow.scss"
 import { useEffect } from 'react';
+import socket from "../../utils/socketIO";
+import moment from 'moment';
+
+
 
 const ChatWindow = (props) => {
     const [msg, setMsg] = useState('');
@@ -14,53 +18,56 @@ const ChatWindow = (props) => {
         setMsg(e.target.value);
     }
 
-    const [chatData, setChatData] = useState([
-        {
-            sender_id: 1,
-            receiver_id: 2,
-            message: 'Hey Binish!',
-            timestamp: '2020-07-22 09:14:55'
-        },
-        {
-            sender_id: 2,
-            receiver_id: 1,
-            message: 'Hey Abhinav! Long time!',
-            timestamp: '2020-07-22 09:15:55'
-        },
-        {
-            sender_id: 1,
-            receiver_id: 2,
-            message: 'Iam doing well. Just thought you would know that you are a great person and this is a really long text!',
-            timestamp: '2020-07-22 09:14:55'
-        }
-    ])
+    const [chatData, setChatData] = useState([]);
     
+    const AlwaysScrollToBottom = () => {
+        const elementRef = useRef();
+        useEffect(() => elementRef.current.scrollIntoView());
+        return <div ref={elementRef} />;
+      };
+
 
     useEffect(() => {
-        console.log('here')
-    }, [chatData]);
+        const getMessages = async () => {
+            try {
+                let res = await axiosForAPI.post(process.env.REACT_APP_GET_MESSAGES_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: receiverData.id}})
+                setChatData(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+            
+        }
+        getMessages();
+
+    }, []);
+
+        socket.on("FromAPI/message", data => {
+            setChatData([...chatData, data]);
+        });
 
     const sendMsg =  () => {
-          let res = axiosForAPI.post('http://192.168.1.124:4000/send-message', {data: {sender_id: props.user_id, receiver_id: 2, message: msg}})
-        console.log({data: {sender_id: props.user_id, receiver_id: receiverData.id, message: msg}});
-        let tempData = {sender_id: props.user_id, receiver_id: receiverData.id, message: msg};
-        let newData = [...chatData, tempData]
-        setChatData(newData);
-        setMsg('')
+        try {
+            let res = axiosForAPI.post(process.env.REACT_APP_SEND_MESSAGE_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: receiverData.id, message: msg}})
+            setMsg('')
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
-
     return ( 
         <div className="chat-container">
             <div className="chat-display">
+                {console.log("my chat data", chatData)}
                 <List
                     dataSource={chatData}
                     bordered={false}
                     renderItem={chat => (
-                        <List.Item className={chat.sender_id === props.user_id ? "right" : "left" }>
-                            <div className="msg">{chat.message}</div>
+                        <List.Item className={parseInt(chat.sender_id) === props.user_id ? "right" : "left" }>
+                            <div className="msg"><Tooltip title={moment(chat.timestamp).format("ddd, hh:mm a")}>{chat.message}</Tooltip></div>
                         </List.Item>
                     )}
                 />
+                <AlwaysScrollToBottom />
             </div>
             <Input
                 className="chat-input"

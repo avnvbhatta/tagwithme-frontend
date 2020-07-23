@@ -14,8 +14,6 @@ const Messages = (props) => {
     }
 
     const sendMsg =  () => {
-        //  let res = axiosForAPI.post('http://localhost:4000/send-message', {data: {sender_id: props.user_id, receiver_id: 2, message: msg}})
-        console.log({data: {sender_id: props.user_id, receiver_id: 2, message: msg}});
         setMsg('')
     }
 

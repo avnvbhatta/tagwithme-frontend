@@ -20,10 +20,6 @@ const SocketComponent = (props) => {
               setRes(data);
               setNewNotificationAlert(true);
             });
-
-            socket.on("FromAPI/message", data => {
-                console.log('from socket message',data)
-              });
         }
 
     }, [props.user_id])
