@@ -47,7 +47,7 @@ const Messages = (props) => {
                     <List.Item onClick={() => showDrawer(user)} className="list-item">
                         <List.Item.Meta
                             avatar={user.imgurl ? <img className="follower-img" src={`${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${user.imgurl}`} alt="avatar" /> : <UserOutlined style={{ fontSize: '25px' }}/>}
-                            title={<div className="chatTitle"> <div className="userName">{user.name}</div> <div className="timestamp">{moment(user.ts).format("ddd, hh:mm a")}</div></div> } 
+                            title={<div className="chatTitle"> <div className="userName">{user.name}</div> <div className="timestamp">{moment(user.timestamp).format("ddd, hh:mm a")}</div></div> } 
                             description={user.message}
                         />
                     </List.Item>
