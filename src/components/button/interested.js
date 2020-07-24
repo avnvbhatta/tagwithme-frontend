@@ -46,7 +46,7 @@ const InterestedButton = (props) => {
 
     }
     return ( 
-        <button className="interestedBtn"
+        <button className="my-btn"
         onClick={handleClick}
         >
           {isInterested ? <StarFilled /> : <StarOutlined />} Interested

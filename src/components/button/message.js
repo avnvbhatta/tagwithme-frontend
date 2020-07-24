@@ -19,11 +19,12 @@ const MessageButton = (props) => {
     };
     return (
          <div className="container">
-            <Button type="primary" shape="round" icon={<MessageFilled />} size={'large'}
-            onClick={showDrawer}
+            
+            <button className="my-btn"
+                onClick={showDrawer}
             >
-            Message
-            </Button>
+            <MessageFilled /> Message
+            </button>
             <Drawer
                 className="drawer"  
                 title={userData.name}

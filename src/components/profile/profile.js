@@ -57,23 +57,20 @@ const Profile = (props) => {
                             <div>Des Moines, IA</div>
                             
                         </div>
-                        <div className="userSocial">
-                            <FacebookOutlined className="userSocialIcons"/>
-                            <TwitterOutlined className="userSocialIcons"/>
-                            <InstagramOutlined className="userSocialIcons"/>
-                        </div>
-                        <div className="messageUser">
-                            {isOwnProfile && !isLoading? "" : <MessageButton userData={userData}/>}
-                            {isOwnProfile && !isLoading? "" : <FollowButton userData={userData} fromProfile={true}/>}
-                        </div>
+                        
+                        
                         <div className="follows">
                             <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
+                        </div>
+
+                        <div className="messageUser">
+                            {isOwnProfile && !isLoading? "" : <MessageButton className="msgBtn" userData={userData}/>}
+                            {isOwnProfile && !isLoading? "" : <FollowButton className="followBtn" userData={userData} fromProfile={true}/>}
                         </div>
                         
                         
                     </div>
                 </div>
-                <div>RANDOM</div>
                
             
         </div>

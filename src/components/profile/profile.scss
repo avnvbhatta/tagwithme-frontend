@@ -64,21 +64,14 @@
                 }
             }
 
-            .follow{
-                display: flex;
-                flex-direction: row;
-                *{
-                    padding-right: 10px;
-                }
-            }
-
+           
             .messageUser{
                 padding: 5px 0px;
-                button{
-                    width:150px;
-                    border-radius: 50px;
-                    height: 50px;
-                    outline: 0px;
+                display: flex;
+                flex-direction: row;
+               
+                div{
+                    padding-right: 8px;
                 }
             }
 

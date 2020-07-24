@@ -1,21 +1,13 @@
-.followBtn{
-    border-radius: 50px;
-    max-width: 150px;
-    border: 2px solid dodgerblue;
-    outline: 0px;
-    padding: 0px 12px;
-    cursor: pointer;
-    transition: all ease-in-out 0.2s;
-    color: dodgerblue;
-    font-weight: bold;
-    height: 30px;
-    
-
-    span{
-        padding-right: 8px;
-    }
-
+.unfollow{
     &:hover{
-        background: rgb(209, 232, 252);
+        background: #dd0101;
+        color: white;
+        border: 1px solid #dd0101;
+        span, div{
+            display: none;
+        }
+        &:before {
+            content:"Unfollow"
+        }
     }
 }

@@ -1,0 +1,25 @@
+.my-btn{
+    border-radius: 50px;
+    width: 110px;
+    border: 1px solid dodgerblue;
+    outline: 0px;
+    padding: 0px 10px;
+    cursor: pointer;
+    transition: all ease-in-out 0.2s;
+    color: dodgerblue;
+    height: 35px;
+    background: transparent;
+    
+
+    span{
+        padding-right: 4px;
+    }
+
+    div{
+        display: inline;
+    }
+
+    &:hover{
+        background: rgb(209, 232, 252);
+    }
+}

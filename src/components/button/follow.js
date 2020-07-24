@@ -51,10 +51,10 @@ const Follow = (props) => {
         return <div></div>
     }
     return ( 
-        <button className="followBtn"
+        <button className={props.followingSet.has(parseInt(id)) ? "my-btn unfollow" : "my-btn"}
             onClick={handleClick}
         >
-          <UserAddOutlined /> {props.followingSet.has(parseInt(id)) ? "Following" : "Follow"}
+          <UserAddOutlined /> <div>{props.followingSet.has(parseInt(id)) ? "Following" : "Follow"}</div>
         </button>
     );
 }
