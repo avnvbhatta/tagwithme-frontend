@@ -21,7 +21,7 @@ const App = (props) => {
   const storedJWT = localStorage.getItem('jwt');
   useEffect(() => {
     
-    if(!props.isLoggedIn){
+    if(storedJWT && !props.isLoggedIn){
       const checkLogin = async () => {
         try {
           const axiosForAPI = axios.create({

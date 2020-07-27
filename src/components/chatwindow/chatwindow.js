@@ -18,10 +18,13 @@ const ChatWindow = (props) => {
     }
 
     const [chatData, setChatData] = useState([]);
+    const [prevChatFetched, setPrevChatFetched] = useState(false);
     
     const AlwaysScrollToBottom = () => {
         const elementRef = useRef();
-        useEffect(() => elementRef.current.scrollIntoView());
+        useEffect(() => { 
+            elementRef.current.scrollIntoView() }
+            );
         return <div ref={elementRef} />;
       };
 
@@ -31,6 +34,7 @@ const ChatWindow = (props) => {
             try {
                 let res = await axiosForAPI.post(process.env.REACT_APP_GET_MESSAGES_ENDPOINT, {data: {sender_id: props.user_id, receiver_id: props.receiver_id}})
                 setChatData(res.data);
+                setPrevChatFetched(true);
             } catch (error) {
                 console.log(error);
             }
@@ -40,9 +44,15 @@ const ChatWindow = (props) => {
 
     }, []);
 
-        socket.on("FromAPI/message", data => {
-            setChatData([...chatData, data]);
-        });
+    useEffect(() => {
+        if(prevChatFetched){
+            socket.on("FromAPI/message", data => {
+                setChatData([...chatData, data]);
+            });
+        }
+        
+    }, [prevChatFetched])
+    
 
     const sendMsg =  () => {
         try {

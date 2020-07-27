@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import {connect} from "react-redux";
 import { useState } from 'react';
 import axiosForAPI from "../../utils/axiosForAPI";
-import {  List, Drawer } from 'antd';
+import {  List } from 'antd';
 import {  UserOutlined, LoadingOutlined } from '@ant-design/icons';
-import ChatWindow from '../chatwindow/chatwindow';
 import moment from "moment";
 import "./messages.scss";
+import ChatDrawer from '../chatdrawer/chatdrawer';
 
 const Messages = (props) => {
     const [chatUsers, setChatUsers] = useState([]);
@@ -54,20 +54,9 @@ const Messages = (props) => {
                     )}
                 />
                 {activeChatUser && 
-                <Drawer
-                    className="drawer"  
-                    title={activeChatUser.name}
-                    placement="right"
-                    closable={true}
-                    onClose={onClose}
-                    width="300"
-                    visible={drawerVisible}
-                    destroyOnClose
-                    bodyStyle={{padding: '0px'}}
-                >
-                    <ChatWindow receiver_id={activeChatUser.user_id}/>
-                
-                </Drawer>
+
+                    <ChatDrawer userData={activeChatUser} drawerVisible={drawerVisible} onClose={onClose}/>
+
                 }
                  
             </div>

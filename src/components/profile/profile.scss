@@ -37,9 +37,19 @@
             }
 
             .userName{
-                font-size: 25px;
-                padding: 5px 0px;
-                font-weight: bold;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                
+                .name{
+                    font-size: 25px;
+                    padding: 5px 0px;
+                    font-weight: bold;
+                    padding-right: 10px;
+                }
+               
+                
             }
 
             .userLocation{

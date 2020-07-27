@@ -39,7 +39,8 @@ const Sidebar = (props) => {
         if(e.key === 'logout'){
             setSelectedKey("/home");
             props.logOut();
-            history.push('/login')
+            history.push('/login');
+            window.location.reload();
         }
         if(e.key === '/notifications'){
             if(newNotificationAlert){

@@ -8,6 +8,8 @@ import ImgUpload from "../imgupload/imgupload";
 import axiosForAPI from "../../utils/axiosForAPI";
 import FollowButton from "../button/follow";
 import FollowView from "../followview/followview";
+import socket from "../../utils/socketIO";
+
 
 const Profile = (props) => {
 
@@ -21,11 +23,20 @@ const Profile = (props) => {
     }
     const [isLoading, setIsLoading] = useState(true);
     const [userData, setUserData] = useState({});
+    const [isOnline, setIsOnline] = useState(false);
+
+    useEffect(() => {
+        socket.on("isOnline", data => {
+            setIsOnline(data);
+        })
+    }, [isOnline])
+
     useEffect(()=>{
         const getData = async () =>{
             try {
                 let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_USER_BY_ID_ENDPOINT}${userid}`);
-                setUserData(res.data)
+                setUserData(res.data);
+                socket.emit("isOnline", userid);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error)
@@ -35,7 +46,7 @@ const Profile = (props) => {
         getData();
         
     }, [])
-    
+
     if(!userData){
         return <h1>User not found.</h1>
     }
@@ -50,18 +61,21 @@ const Profile = (props) => {
                         }
                     </div>
                     <div className="userDetails">
-                        {userData ? <div className="userName">{userData.name}</div> : <Space size="middle"><Spin /></Space>}
+                        <div className="userName">
+                            <div className="name">{userData.name}</div>
+                            <div className={`online-status ${isOnline ? "online" : "offline"}`}>
+                            </div>
+                        </div> 
                         
                         <div className="userLocation">
                             <EnvironmentOutlined />
                             <div>Des Moines, IA</div>
-                            
                         </div>
-                        
                         
                         <div className="follows">
                             <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
                         </div>
+                        
 
                         <div className="messageUser">
                             {isOwnProfile && !isLoading? "" : <MessageButton className="msgBtn" userData={userData}/>}
@@ -82,7 +96,7 @@ const Profile = (props) => {
  
 const mapStateToProps = (state) => {
     return{
-        userData: state.userData
+        userData: state.userData,
     }
 }
 export default connect(mapStateToProps)(Profile);
