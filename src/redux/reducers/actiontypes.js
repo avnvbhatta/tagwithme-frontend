@@ -11,4 +11,3 @@ export const UPDATE_EVENT_INTERESTED  = 'UPDATE_EVENT_INTERESTED';
 export const UPLOAD_IMAGE = 'UPLOAD_IMAGE'; 
 export const UNFOLLOW  = 'UNFOLLOW'; 
 export const FOLLOW = 'FOLLOW'; 
-export const ASS ='ASS'
