@@ -2,4 +2,16 @@
     padding: 10px;
     height: 100vh;
     overflow: auto;
+
+    .comment-area{
+        display: flex;
+        flex-direction: column;
+        
+       
+        button{
+            align-self: flex-end;
+            margin-top: 5px;
+            width: 150px;
+        }
+    }
 }
