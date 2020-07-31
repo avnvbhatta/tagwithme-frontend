@@ -44,14 +44,18 @@ const ChatWindow = (props) => {
 
     }, []);
 
+   
     useEffect(() => {
         if(prevChatFetched){
-            socket.on("FromAPI/message", data => {
-                setChatData([...chatData, data]);
+            socket.on("FromAPI/message", (data) => {
+                //Making sure that we have access to the latest chatData 
+                setChatData((chatData) => [...chatData, data ]);
             });
         }
         
     }, [prevChatFetched])
+
+    
     
 
     const sendMsg =  () => {

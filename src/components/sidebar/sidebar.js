@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
@@ -34,6 +34,10 @@ const Sidebar = (props) => {
         history.push(selectedKey);
     }
 
+    const [newGenericNotificationAlert, setNewGenericNotificationAlert] = useState(false);
+    const [newMessageNotificationAlert, setNewMessageNotificationAlert] = useState(false);
+
+
     //Update state based on menu selection
     const menuSelect = (e) =>{
         if(e.key === 'logout'){
@@ -43,14 +47,22 @@ const Sidebar = (props) => {
             window.location.reload();
         }
         if(e.key === '/notifications'){
-            if(newNotificationAlert){
-                setNewNotificationAlert(false);
+            if(newGenericNotificationAlert){
+                setNewGenericNotificationAlert(false);
             }
+            history.push('/notifications');
+
+        }
+        if(e.key === '/message'){
+            if(newMessageNotificationAlert){
+                setNewMessageNotificationAlert(false);
+            }
+            history.push('/messages');
+
         }
         setSelectedKey(e.key)
     }
 
-    const [newNotificationAlert, setNewNotificationAlert] = useState(false);
 
      
     //Don't display sidebar on login and signup screens
@@ -71,24 +83,35 @@ const Sidebar = (props) => {
                     <Menu.Item key="/profile" icon={<UserOutlined />} >
                         Profile<Link to="/profile" />
                     </Menu.Item>
-                    <Menu.Item key="/message" icon={<CommentOutlined />} >
+                    {/* <Menu.Item key="/message" icon={<CommentOutlined />} >
                         Messages<Link to="/messages" />
+                    </Menu.Item> */}
+                    <Menu.Item key="/message" icon={<Badge dot={collapsed && newMessageNotificationAlert} style={{top: '12px'}}><CommentOutlined /></Badge>} >
+                        {!collapsed && <Link to="/messages" ><Badge dot={newMessageNotificationAlert} style={{right: '-6px'}}>Messages</Badge></Link>  }
                     </Menu.Item>
-                    <Menu.Item key="/notifications" icon={<Badge dot={collapsed && newNotificationAlert} style={{top: '12px'}}><NotificationOutlined /></Badge>} >
-                        {!collapsed && <Link to="/notifications" ><Badge dot={newNotificationAlert} style={{right: '-6px'}}>Notifications</Badge></Link>  }
+                    <Menu.Item key="/notifications" icon={<Badge dot={collapsed && newGenericNotificationAlert} style={{top: '12px'}}><NotificationOutlined /></Badge>} >
+                        {!collapsed && <Link to="/notifications" ><Badge dot={newGenericNotificationAlert} style={{right: '-6px'}}>Notifications</Badge></Link>  }
                     </Menu.Item>
                     <Menu.Item key="logout" icon={<LogoutOutlined />}>
                         Log Out  
                     </Menu.Item>
                 </Menu>
-                <SocketComponent newNotificationAlert={[newNotificationAlert, setNewNotificationAlert] }/> 
+                <SocketComponent 
+                newGenericNotificationAlert={[newGenericNotificationAlert, setNewGenericNotificationAlert] }
+                newMessageNotificationAlert={[newMessageNotificationAlert, setNewMessageNotificationAlert] }
+                
+                /> 
             </Sider>
     );
 }
 
+
+
 const mapDispatchToProps = (dispatch) => {
     return{
-        logOut: (response) => dispatch({type: 'USER_LOG_OUT'})
+        logOut: (response) => dispatch({type: 'USER_LOG_OUT'}),
+        setNewMessageNotification: (data) => dispatch({type: 'SET_NEW_MESSAGE_NOTIFICATION', val: data }),
+        setNewGeneralNotification: (data) => dispatch({type: 'SET_NEW_GENERAL_NOTIFICATION', val: data }),
     }
 }
  

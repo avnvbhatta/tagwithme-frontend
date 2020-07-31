@@ -7,6 +7,8 @@ import {  UserOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from "moment";
 import "./messages.scss";
 import ChatDrawer from '../chatdrawer/chatdrawer';
+import socket from "../../utils/socketIO";
+
 
 const Messages = (props) => {
     const [chatUsers, setChatUsers] = useState([]);
@@ -22,12 +24,36 @@ const Messages = (props) => {
         setDrawerVisible(false);
         setActiveChatUser(null);
     };
+
+    const [initialMessagesFromDBFetched, setInitialMessagesFromDBFetched] = useState(false);
+
+    //Use effect to dynamically update with latest message from chat
+    useEffect(() => {
+        if(initialMessagesFromDBFetched){
+            socket.on("FromAPI/message", data => {
+                let newData = chatUsers.map(el => {
+                    if(el.id == parseInt(data.sender_id))
+                       return Object.assign({}, el, {message: data.message, timestamp: data.timestamp})
+                    return el
+                });
+                newData = newData.sort(function(a,b){
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                  });
+                setChatUsers(newData);
+
+            });
+        }
+        
+    }, [initialMessagesFromDBFetched])
+
+    
     useEffect(()=>{
         const getChatUsers = async () => {
             try {
                 let res = await axiosForAPI.post(process.env.REACT_APP_GET_CHAT_USERS_ENDPOINT, {data: {sender_id: props.user_id}})
                 setChatUsers(res.data);
                 setIsLoading(false);
+                setInitialMessagesFromDBFetched(true);
             } catch (error) {
                 console.log(error);
             }
@@ -71,7 +97,7 @@ const Messages = (props) => {
 
 const mapStateToProps = (state) => {
     return{
-        user_id: state.userData.id
+        user_id: state.userData.id,
     }
 }
 export default connect(mapStateToProps)(Messages);
