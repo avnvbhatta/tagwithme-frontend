@@ -3,6 +3,10 @@
     height: 100vh;
     overflow: auto;
 
+    .radius-selector{
+        padding-bottom: 8px;
+    }
+
     .comment-area{
         display: flex;
         flex-direction: column;
@@ -15,9 +19,5 @@
         }
     }
 
-    .ant-comment-nested{
-        .ant-comment-inner{
-            padding: 0;
-        }
-    }
+    
 }

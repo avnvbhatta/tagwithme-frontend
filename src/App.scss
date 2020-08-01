@@ -37,3 +37,9 @@
     width:15px;
     height: 15px;
 }    
+
+.ant-comment-nested{
+    .ant-comment-inner{
+        padding: 0;
+    }
+}

@@ -2,10 +2,12 @@ import React, { useEffect, useState, useHistory } from 'react';
 import axiosForAPI from "../../utils/axiosForAPI";
 import {connect} from "react-redux";
 import { LoadingOutlined, UserOutlined } from '@ant-design/icons';
-import { List, Avatar } from 'antd';
+import { List, Avatar, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import "./notifications.scss";
 import NotificationDetail from "./notificationdetail";
+import moment from 'moment';
+
 
 
 const Notifications = (props) => {
@@ -18,7 +20,6 @@ const Notifications = (props) => {
     useEffect(() => {
         const getNotifications = async () => {
             let res = await axiosForAPI.post(process.env.REACT_APP_GET_NOTIFICATIONS_ENDPOINT, {user_id: props.user_id})
-            console.log(res.data);
             setNotificationData(res.data);
             setIsLoading(false);
         }
@@ -27,13 +28,13 @@ const Notifications = (props) => {
 
     const getSpecificNotif = (notification) => {
         if(notification.type === 'follow'){
-            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> followed you.</div> ;
+        return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> followed you.</div> ;
         }
         else if(notification.type === 'like'){
-            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> liked your <Link to={`/notificationdetail/${notification.event_id}`}>post</Link>.</div> ;
+            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> liked your <Link to={`/notificationdetail/${notification.event_id}`}>post.</Link></div> ;
         }
         else if(notification.type === 'comment'){
-            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> commented on your post.</div> ;
+            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> commented on your <Link to={`/notificationdetail/${notification.event_id}`}>post</Link>.</div> ;
 
         }
     }
@@ -54,7 +55,13 @@ const Notifications = (props) => {
                         alt={notification.sender_name}
                         // onClick={()=> history.push(`/profile/${notification.sender_id}`)}
                     /> }
-                    description={getSpecificNotif(notification)}
+                    title={getSpecificNotif(notification)}
+
+                    description={
+                        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                                <span>{moment(notification.created_at).fromNow()}</span>
+                        </Tooltip>
+                    }
                     />
                 </List.Item>
                 )}
