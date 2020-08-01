@@ -10,8 +10,14 @@
        
         button{
             align-self: flex-end;
-            margin-top: 5px;
+            margin: 8px 0px 8px 0px;
             width: 150px;
+        }
+    }
+
+    .ant-comment-nested{
+        .ant-comment-inner{
+            padding: 0;
         }
     }
 }
