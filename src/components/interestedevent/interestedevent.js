@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import axiosForAPI from "../../utils/axiosForAPI";
-import { Select, Space, Comment, Tooltip, Avatar, Input, Divider  } from 'antd';
+import { Comment, Tooltip, Avatar, Input,   } from 'antd';
 import moment from 'moment';
 import { LoadingOutlined, LikeOutlined, LikeFilled, UserOutlined } from '@ant-design/icons';
 import {connect} from "react-redux";
@@ -48,9 +48,9 @@ const InterestedEvent = (props) => {
         axiosForAPI.post(process.env.REACT_APP_ADD_COMMENT_ENDPOINT, data).then(res => {
             props.setAddingComment(false);
             setAddingComment(false);
+            setComment('');
 
         })
-
     }
 
     const handleTextAreaChange = (e) => {
@@ -100,7 +100,7 @@ const InterestedEvent = (props) => {
                     
                 >
                     <div className="comment-area">
-                        <TextArea rows={1} autoSize allowClear onChange={handleTextAreaChange} placeholder="Write a comment..."/>
+                        <TextArea rows={1} autoSize allowClear onChange={handleTextAreaChange} value={comment} placeholder="Write a comment..."/>
                         <button className="my-btn" onClick={() => addComment(event)}>{addingComment ? <LoadingOutlined /> : "Add Comment"}</button>
                     </div>
 

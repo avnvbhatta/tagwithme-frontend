@@ -9,6 +9,7 @@ import axiosForAPI from "../../utils/axiosForAPI";
 import FollowButton from "../button/follow";
 import FollowView from "../followview/followview";
 import socket from "../../utils/socketIO";
+import MyEvents from "./myevents";
 
 
 const Profile = (props) => {
@@ -85,6 +86,7 @@ const Profile = (props) => {
                         
                     </div>
                 </div>
+                <MyEvents />
                
             
         </div>

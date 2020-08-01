@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import './sidebar.scss';
-import { Link, withRouter, useHistory} from 'react-router-dom';
+import { Link, withRouter, useHistory, useLocation} from 'react-router-dom';
 import {
     HomeOutlined,
     CommentOutlined,
@@ -19,6 +19,29 @@ const { Sider } = Layout;
 
 
 const Sidebar = (props) => {
+    let location = useLocation();
+    let currentComponentPath = "/home";
+    if(location.pathname.toLowerCase().includes('home')){
+        currentComponentPath = "/home";
+    }
+    else if(location.pathname.toLowerCase().includes('profile')){
+        currentComponentPath = "/profile";
+    }
+    else if(location.pathname.toLowerCase().includes('events')){
+        currentComponentPath = "/events";
+    }
+    else if(location.pathname.toLowerCase().includes('messages')){
+        currentComponentPath = "/messages";
+    }
+    else if(location.pathname.toLowerCase().includes('notification')){
+        currentComponentPath = "/notifications";
+    }
+    else if(location.pathname.toLowerCase().includes('feed')){
+        currentComponentPath = "/feed";
+    }
+    
+
+
     const history = useHistory();
     //State of sidebar collapse
     const [collapsed, setCollapsed] = useState(false);
@@ -26,7 +49,7 @@ const Sidebar = (props) => {
         setCollapsed(collapsed);
     };
     //Set default menu select
-    const [selectedKey, setSelectedKey] = useState('/home')
+    const [selectedKey, setSelectedKey] = useState(currentComponentPath)
 
     //Navigate to home on logo click
     const logoClick = () => {
