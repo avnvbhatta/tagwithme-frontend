@@ -47,11 +47,11 @@ const ListView = (props) =>{
                 }
             >
                 <List.Item.Meta
-                title={<a href={event.url}>{event.name}</a>}
+                title={<a href={event.url} target="_blank">{event.name} </a>}
                 description={`${event.venue}, 
                 ${event.address}, ${event.city}, ${event.state}, ${event.postalCode}`}
                 />
-                <InterestedButton className="interestedBtn" event={event}/>                
+                <InterestedButton  event={event}/>                
                 
             </List.Item>
             

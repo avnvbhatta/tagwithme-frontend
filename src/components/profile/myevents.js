@@ -3,9 +3,8 @@ import { useState, useEffect } from 'react';
 import InterestedEvent from '../interestedevent/interestedevent';
 import axiosForAPI from "../../utils/axiosForAPI";
 import {connect} from "react-redux";
-
+import "./myevents.scss"
 const MyEvents = (props) => {
-
     const [myEvents, setMyEvents] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [toggleLike, setToggleLike] = useState(false);
@@ -13,7 +12,7 @@ const MyEvents = (props) => {
 
     useEffect(() => { 
           const getInterestedEvents = async () =>{
-            let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.user_id}`);
+            let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_INTERESTED_EVENTS_ENDPOINT}${props.userid}`);
             const interestedEvents = await res.data;
     
             setMyEvents(interestedEvents);
@@ -24,7 +23,7 @@ const MyEvents = (props) => {
     }, [toggleLike, addingComment]);
 
     return ( 
-        <div>
+        <div className="myevents-container">
             <h1>My Events</h1>
             <InterestedEvent events={myEvents} setAddingComment={setAddingComment} setToggleLike={setToggleLike}/>
         </div>

@@ -37,7 +37,9 @@ const Profile = (props) => {
             try {
                 let res = await axiosForAPI.get(`${process.env.REACT_APP_API_GET_USER_BY_ID_ENDPOINT}${userid}`);
                 setUserData(res.data);
-                socket.emit("isOnline", userid);
+                if(isOwnProfile){
+                    socket.emit("isOnline", userid);
+                }
                 setIsLoading(false);
             } catch (error) {
                 console.log(error)
@@ -86,7 +88,7 @@ const Profile = (props) => {
                         
                     </div>
                 </div>
-                <MyEvents />
+                <MyEvents userid={userid}/>
                
             
         </div>
