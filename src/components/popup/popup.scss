@@ -1,0 +1,17 @@
+.popup-container{
+    display: flex;
+    flex-direction: column;
+
+    h2{
+        font-size: 1.1em;
+    }
+
+    .ant-card-meta-title{
+        white-space: normal;
+    }
+
+    .event-info{
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -1,107 +1,13 @@
 .mapContainer {
     height: calc(100vh - 120px);
     position: relative;
+
+    .mapboxgl-popup, .mapboxgl-popup-anchor-top{
+      max-width: none !important;
+
+      .mapboxgl-popup-content{
+        padding: 0px;
+      }
+  }
 }
 
-.marker {
-    background-image: url('marker.png');
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  .mapboxgl-popup {
-    max-width: inherit;
-    
-  }
-  
-  .mapboxgl-popup-content {
-    font-family: 'Open Sans', sans-serif;
-    width: 420px;
-  }
-
-  .popup{
-    width: 400px;
-    max-width: 240px;
-    // height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    padding: 10px 0px 10px 0px;
-    
-    .content{
-      display: flex;
-      flex-direction: row;
-      padding: 10px;
-      justify-content: space-between;
-      
-      .left{
-        display:flex;
-        flex-direction:column;
-        text-align: left;
-          .title{
-            font-size: 35px;
-            padding-bottom: 20px;
-            line-height: 35px;
-          }
-        .venue{
-          font-size: 20px;
-          padding-bottom: 10px;
-        }
-        
-        .address{
-          font-size: 15px;
-          padding-bottom: 10px;
-        }
-        .distance{
-          font-size: 12px;
-          padding-bottom: 10px;
-        }
-        .price{
-          font-size: 12px;
-        }
-        .distancePrice{
-          font-size: 12px;
-          padding-bottom: 10px;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-      }
-      
-      .right{
-        display:flex;
-        flex-direction:column;
-        align-items: center;
-        justify-content: center;
-        
-        .datetime{
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          border: 2px solid #1da1f2;
-          font-size: 20px;
-        }
-      }
-    }  
-    
-    .interested{
-      display: flex;
-      flex-direction:row;
-      justify-content: center;
-      align-items: center;
-      background: #0562b3;
-      border-radius: 50px;
-      color: white;
-      font-size: 15px;
-      height: 40px;
-      width: 50%;
-      margin: auto;
-    }
-  }

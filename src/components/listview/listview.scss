@@ -5,26 +5,14 @@
         overflow: auto;
     }
     
-    
-    .ant-list-item{
-    
-        .ant-list-item-main{
-    
-            display: flex;
-            flex-direction: column;
-        
-            .ant-list-item-meta{
-                order: 1;
-                margin-bottom: 0px;
-            }
-            .my-btn{
-                order: 3;
-            }
-            .ant-list-item-action{
-                order: 2;
-                margin: 0px 0px 16px 0px;
-    
-            }
+    .ant-list-item-action{
+        li:first-child{
+            padding: 0 30px;
+        }
+        li{
+            padding: 0 30px;
         }
     }
+    
+    
 }

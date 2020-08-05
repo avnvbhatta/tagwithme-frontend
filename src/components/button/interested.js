@@ -3,6 +3,7 @@ import "./interested.scss";
 import { StarOutlined, StarFilled } from '@ant-design/icons';
 import {connect} from "react-redux";
 import axiosForAPI from "../../utils/axiosForAPI"
+import {Tooltip} from "antd";
 
 
 const InterestedButton = (props) => {
@@ -46,13 +47,14 @@ const InterestedButton = (props) => {
 
     }
     return ( 
-        <button className="my-btn"
-        onClick={handleClick}
-        >
-          {isInterested ? <StarFilled /> : <StarOutlined />} Interested
-        </button>
+        <React.Fragment>
+            <Tooltip title="Interested?" color={'dodgerblue'} key={'dodgerblue'}>
+                {isInterested ? <StarFilled onClick={handleClick} style={{color: 'dodgerblue'}}/> : <StarOutlined onClick={handleClick}/>}
+            </Tooltip>
+        </React.Fragment>  
     );
 }
+
 
 const mapStateToProps = (state) =>{
     return{

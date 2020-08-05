@@ -4,6 +4,8 @@ import mapboxgl from 'mapbox-gl';
 import "./mapview.scss";
 import { connect } from "react-redux";
 import Popup from "../popup/popup";
+import { Provider } from "react-redux";
+import store from "../../redux/index";
 
 
 const MapView = (props) => {
@@ -89,7 +91,7 @@ const MapView = (props) => {
             const feature = e.features[0];
             // create popup node
             const popupNode = document.createElement("div");
-            ReactDOM.render(<Popup feature={feature} />, popupNode);
+            ReactDOM.render(<Provider store={store}><Popup feature={feature} popUpRef={popUpRef} props={props.events}/></Provider>, popupNode);
             // set popup on map
             popUpRef.current
               .setLngLat(feature.geometry.coordinates)

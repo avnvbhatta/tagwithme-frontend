@@ -35,6 +35,7 @@ export const filterTicketMasterEvents = (events, interestedEvents) => {
                 title: event.name || 'Untitled Event',
                 icon: 'harbor',
                 id: event.id || 'bad_id',
+                event: eventInfo
 
             },
             geometry: {
