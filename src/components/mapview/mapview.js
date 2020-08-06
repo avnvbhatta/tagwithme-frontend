@@ -29,13 +29,62 @@ const MapView = (props) => {
         map.on("load", () => {
           setMap(map);
           map.resize();      
+          
 
           map.addSource('points', {
             'type': 'geojson',
-            'data': props.geoJSONData
+            'data': props.geoJSONData,
+            cluster: true,
+            clusterMaxZoom: 12, // Max zoom to cluster points on
+            clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
          });
         
-        
+
+         map.addLayer({
+          id: 'clusters',
+          type: 'circle',
+          source: 'points',
+          filter: ['has', 'point_count'],
+          paint: {
+          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+          // with three steps to implement three types of circles:
+          //   * Blue, 20px circles when point count is less than 100
+          //   * Yellow, 30px circles when point count is between 100 and 750
+          //   * Pink, 40px circles when point count is greater than or equal to 750
+            'circle-color': [
+              'step',
+              ['get', 'point_count'],
+              '#51bbd6',
+              25,
+              '#f1f075',
+              50,
+              '#f28cb1'
+            ],
+            'circle-radius': [
+              'step',
+              ['get', 'point_count'],
+              10,
+              50,
+              20,
+              100,
+              30
+            ]
+          }
+          });
+
+          
+          map.addLayer({
+            id: 'cluster-count',
+            type: 'symbol',
+            source: 'points',
+            filter: ['has', 'point_count'],
+            layout: {
+            'text-field': '{point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 12
+            }
+            });
+
           map.addLayer({
               'id': 'points',
               'type': 'symbol',
@@ -48,41 +97,85 @@ const MapView = (props) => {
                   'text-field': ['get', 'title'],
                   'icon-size': 3,
                   "icon-offset": [0, -7],
+                  // 'icon-image': '{id}',
+                  // 'icon-size': 0.25,
+                  // "icon-anchor": 'bottom',
+                  
                   'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                   'text-offset': [0, 0.6],
                   'text-anchor': 'top',
-                  "text-size": 18
+                  "text-size": 15
               },
               
         });
-        
-        props.geoJSONData.features.forEach(function(marker) {
-          /* Create a div element for the marker. */
-          var el = document.createElement('div');
-          /* Assign a unique `id` to the marker. */
-          el.id = "marker-" + marker.properties.id;
-          /* Assign the `marker` class to each marker for styling. */
-          el.className = 'marker';
-          el.style.backgroundImage =`url(${marker.properties.event.images})`;
-          el.style.border="2px solid white"
-            el.style.width = '50px';
-            el.style.height = '50px';
-            el.style.backgroundSize = 'cover';
-            el.style.backgroundPosition = 'center';
 
-            el.addEventListener('click', function() {
-              // window.alert(marker.properties.message);
-              // map.fire("click", "points");
+       
+        
+
+          // inspect a cluster on click
+          map.on('click', 'clusters', function(e) {
+            var features = map.queryRenderedFeatures(e.point, {
+              layers: ['clusters']
             });
+            var clusterId = features[0].properties.cluster_id;
+            map.getSource('points').getClusterExpansionZoom(
+              clusterId,
+              function(err, zoom) {
+              if (err) return;
+              
+              map.easeTo({
+                center: features[0].geometry.coordinates,
+                zoom: zoom
+              });
+              }
+            );
+          });
+
+
+            // When a click event occurs on a feature in
+            // the unclustered-point layer, open a popup at
+            // the location of the feature, with
+            // description HTML from its properties.
+            map.on('click', 'unclustered-point', function(e) {
+              var coordinates = e.features[0].geometry.coordinates.slice();
+              var mag = e.features[0].properties.mag;
+              
+              // Ensure that if the map is zoomed out such that
+              // multiple copies of the feature are visible, the
+              // popup appears over the copy being pointed to.
+              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+              }
+              });
+            
+        //Load images as marker. 
+        // props.geoJSONData.features.forEach(function(marker) {
+        //   /* Create a div element for the marker. */
+        //   var el = document.createElement('div');
+        //   /* Assign a unique `id` to the marker. */
+        //   el.id = "marker-" + marker.properties.id;
+        //   /* Assign the `marker` class to each marker for styling. */
+        //   el.className = 'marker';
+        //   el.style.backgroundImage =`url(${marker.properties.event.images})`;
+        //   el.style.border="2px solid white"
+        //     el.style.width = '50px';
+        //     el.style.height = '50px';
+        //     el.style.backgroundSize = 'cover';
+        //     el.style.backgroundPosition = 'center';
+
+        //     el.addEventListener('click', function() {
+        //       // window.alert(marker.properties.message);
+        //       // map.fire("click", "points");
+        //     });
           
-          /**
-           * Create a marker using the div element
-           * defined above and add it to the map.
-          **/
-          new mapboxgl.Marker(el, { offset: [0, -15] })
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map);
-        });
+        //   /**
+        //    * Create a marker using the div element
+        //    * defined above and add it to the map.
+        //   **/
+        //   new mapboxgl.Marker(el, { offset: [0, -15] })
+        //     .setLngLat(marker.geometry.coordinates)
+        //     .addTo(map);
+        // });
 
 
 
@@ -121,6 +214,19 @@ const MapView = (props) => {
 
         // reset cursor to default when user is no longer hovering over a clickable feature
         map.on("mouseleave", "points", () => {
+          map.getCanvas().style.cursor = "";
+        });
+
+
+        // change cursor to pointer when user hovers over a clickable feature
+        map.on("mouseenter", "clusters", e => {
+          if (e.features.length) {
+            map.getCanvas().style.cursor = "pointer";
+          }
+        });
+
+        // reset cursor to default when user is no longer hovering over a clickable feature
+        map.on("mouseleave", "clusters", () => {
           map.getCanvas().style.cursor = "";
         });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { List, Space, Avatar } from 'antd';
-import {  DollarTwoTone, CalendarTwoTone, CarTwoTone } from '@ant-design/icons';
+import {  DollarTwoTone, CalendarTwoTone, CarTwoTone, EnvironmentOutlined, EnvironmentTwoTone } from '@ant-design/icons';
 import InterestedButton from '../button/interested';
 import {connect} from "react-redux"
 import "./listview.scss";
@@ -15,6 +15,10 @@ const ListView = (props) =>{
         </Space>
       );
 
+    const onAddressClick = (event) => {
+        // console.log(event)
+    }
+
     return(
         <List
             className="eventlist"
@@ -27,28 +31,38 @@ const ListView = (props) =>{
             pageSize: 10,
             }}
             dataSource={props.events}
-            renderItem={event => (
+            renderItem={myEvent => (
                 <List.Item
-                    key={event.id}
+                    key={myEvent.id}
                     actions={[
-                        <IconText icon={CalendarTwoTone} text={`${event.startDate} @ ${event.startTime}`} key="list-vertical-star-o" />,
-                        <IconText icon={CarTwoTone} text={`${event.distance}`} key="list-vertical-message" />,
-                        <IconText icon={DollarTwoTone} text={`${event.priceRange}`} key="list-vertical-like-o" />,
+                        <IconText icon={CalendarTwoTone} text={`${myEvent.startDate} @ ${myEvent.startTime}`} key="list-vertical-star-o" />,
+                        <IconText icon={CarTwoTone} text={`${myEvent.distance}`} key="list-vertical-message" />,
+                        <IconText icon={DollarTwoTone} text={`${myEvent.priceRange}`} key="list-vertical-like-o" />,
                         
                     ]}
                     extra={
                         <img
                         width={272}
                         alt="logo"
-                        src={event.images}
+                        src={myEvent.images}
                     /> 
                     }
                 >
                     <List.Item.Meta
-                    avatar={<InterestedButton event={event}/>}
-                    title={<div><a href={event.url} target="_blank">{event.name} </a></div> }
-                    description={`${event.venue}, 
-                    ${event.address}, ${event.city}, ${event.state}, ${event.postalCode}`}
+                    avatar={<InterestedButton event={myEvent}/>}
+                    title={<div><a href={myEvent.url} target="_blank">{myEvent.name} </a></div> }
+                    description={
+                    <div className="event-details">
+                        <div className="event-venue">
+                            {myEvent.venue}
+                        </div>
+                        <div className="event-address" onClick={() => onAddressClick(myEvent)}>
+                            <IconText icon={EnvironmentTwoTone}  text={`${myEvent.address}, ${myEvent.city}, ${myEvent.state}, ${myEvent.postalCode}`}
+                            key="list-vertical-like-o" />
+                        </div>
+                        
+                        
+                    </div>}
                     />
                     
                 </List.Item>
