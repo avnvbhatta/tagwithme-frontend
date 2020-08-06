@@ -48,7 +48,7 @@ const InterestedButton = (props) => {
     }
     return ( 
         <React.Fragment>
-            <Tooltip title="Interested?" color={'dodgerblue'} key={'dodgerblue'}>
+            <Tooltip title="Interested" color={'dodgerblue'} key={'dodgerblue'}>
                 {isInterested ? <StarFilled onClick={handleClick} style={{color: 'dodgerblue'}}/> : <StarOutlined onClick={handleClick}/>}
             </Tooltip>
         </React.Fragment>  

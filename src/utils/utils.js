@@ -1,5 +1,24 @@
 import moment from 'moment';
 
+const getSegmentIcon = (segment) => {
+    let mySegment = segment.toLowerCase();
+    if(mySegment === 'sports'){
+        return 'harbor'
+    }
+    else if(mySegment === 'arts & theatre'){
+        return 'theatre'
+    }
+    else if(mySegment === 'music'){
+        return 'music'
+    }
+    else if(mySegment === 'miscellaneous'){
+        return 'pitch'
+    }
+    else if(mySegment === 'film'){
+        return 'cinema'
+    }
+
+}
 export const filterTicketMasterEvents = (events, interestedEvents) => {
     let eventsArray = [];
     let geoJSONFeatureArray = [];
@@ -33,7 +52,7 @@ export const filterTicketMasterEvents = (events, interestedEvents) => {
             type: 'Feature',
             properties: {
                 title: event.name || 'Untitled Event',
-                icon: 'harbor',
+                icon: event.classifications[0].segment.name === undefined ? "harbor" : getSegmentIcon(event.classifications[0].segment.name),
                 id: event.id || 'bad_id',
                 event: eventInfo
 

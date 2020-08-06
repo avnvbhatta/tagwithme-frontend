@@ -46,7 +46,7 @@ const EventsView = (props) => {
               apikey: process.env.REACT_APP_TICKETMASTER_API_KEY,
               geoPoint: Math.round(props.lat) + "," + Math.round(props.lng),
               radius: 100,
-              size: 3
+              size: 10
             }
           });
           const eventsRes = await response.data._embedded.events;

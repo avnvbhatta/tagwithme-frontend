@@ -8,10 +8,12 @@ import { Provider } from "react-redux";
 import store from "../../redux/index";
 
 
+
 const MapView = (props) => {
+  
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
-  const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const popUpRef = useRef(new mapboxgl.Popup({offset: 15}));
 
   useEffect(() => {
     if (props.events) {
@@ -32,6 +34,8 @@ const MapView = (props) => {
             'type': 'geojson',
             'data': props.geoJSONData
          });
+        
+        
           map.addLayer({
               'id': 'points',
               'type': 'symbol',
@@ -42,11 +46,46 @@ const MapView = (props) => {
                   'icon-image': ['concat', ['get', 'icon'], '-15'],
                   // get the title name from the source's "title" property
                   'text-field': ['get', 'title'],
+                  'icon-size': 3,
+                  "icon-offset": [0, -7],
                   'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                   'text-offset': [0, 0.6],
-                  'text-anchor': 'top'
-              }
+                  'text-anchor': 'top',
+                  "text-size": 18
+              },
+              
         });
+        
+        props.geoJSONData.features.forEach(function(marker) {
+          /* Create a div element for the marker. */
+          var el = document.createElement('div');
+          /* Assign a unique `id` to the marker. */
+          el.id = "marker-" + marker.properties.id;
+          /* Assign the `marker` class to each marker for styling. */
+          el.className = 'marker';
+          el.style.backgroundImage =`url(${marker.properties.event.images})`;
+          el.style.border="2px solid white"
+            el.style.width = '50px';
+            el.style.height = '50px';
+            el.style.backgroundSize = 'cover';
+            el.style.backgroundPosition = 'center';
+
+            el.addEventListener('click', function() {
+              // window.alert(marker.properties.message);
+              // map.fire("click", "points");
+            });
+          
+          /**
+           * Create a marker using the div element
+           * defined above and add it to the map.
+          **/
+          new mapboxgl.Marker(el, { offset: [0, -15] })
+            .setLngLat(marker.geometry.coordinates)
+            .addTo(map);
+        });
+
+
+
         });
 
         map.addControl(new mapboxgl.NavigationControl());

@@ -66,7 +66,7 @@ const InterestedEvent = (props) => {
                     key={`${event.timestamp}`}
                     actions={
                         [  
-                            <Tooltip key="comment-basic-like" title="Like">
+                            <Tooltip key="comment-basic-like" color={'dodgerblue'} title="Like">
                             <span onClick={() => like(event)}>
                                 {event.like_user_id.includes(props.userId)  ? <LikeFilled style={{color: "dodgerblue"}}/> : <LikeOutlined/>}
                                 <span className="comment-action">{event.likes}</span>
