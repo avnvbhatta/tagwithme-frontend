@@ -15,6 +15,8 @@ const { TabPane } = Tabs;
 
 
 const EventsView = (props) => {
+
+  const [selectedTab, setSelectedTab] = useState('map');
   
   //hook to get user interested event to highlight already interested events
   useEffect(() => { 
@@ -35,6 +37,8 @@ const EventsView = (props) => {
    
 }, [props.isLoggedIn]);
 
+  
+
   //Get events from ticketmaster
   useEffect(() => {
     props.setEvents([])
@@ -45,12 +49,15 @@ const EventsView = (props) => {
             params: {
               apikey: process.env.REACT_APP_TICKETMASTER_API_KEY,
               geoPoint: Math.round(props.lat) + "," + Math.round(props.lng),
-              radius: 100,
-              size: 10
+              radius: 75,
+              size: 75
             }
           });
           const eventsRes = await response.data._embedded.events;
-          const { eventsArray, geoJSONFeatureArray } = filterTicketMasterEvents(eventsRes, props.interestedEvents);
+          var uniqueEvents = eventsRes.filter(function({name}) {
+            return !this[name] && (this[name] = name)
+          }, {})
+          const { eventsArray, geoJSONFeatureArray } = filterTicketMasterEvents(uniqueEvents, props.interestedEvents);
           props.setEvents(eventsArray);
           props.setGeoJSONFeatures(geoJSONFeatureArray);
         }
@@ -63,10 +70,13 @@ const EventsView = (props) => {
   }, [props.interestedEvents, props.lng]);
 
 
+  const handleTabClick = (key) => {
+    setSelectedTab(key);
+  }
 
   return (<div className="eventsContainer">
     <Search className="searchBar" />
-    <Tabs defaultActiveKey="1" >
+    <Tabs defaultActiveKey={selectedTab} activeKey={selectedTab} onTabClick={handleTabClick} >
       <TabPane
         tab={
           <span>
@@ -74,7 +84,7 @@ const EventsView = (props) => {
                 View On A Map
               </span>
         }
-        key="1"
+        key="map"
       >
         <MapView />
       </TabPane>
@@ -85,9 +95,9 @@ const EventsView = (props) => {
                 View In A List
               </span>
         }
-        key="2"
+        key="list"
       >
-        <ListView />
+        <ListView setSelectedTab={setSelectedTab}/>
       </TabPane>
     </Tabs>
   </div>)

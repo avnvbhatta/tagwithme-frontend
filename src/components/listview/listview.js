@@ -16,7 +16,8 @@ const ListView = (props) =>{
       );
 
     const onAddressClick = (event) => {
-        // console.log(event)
+        props.setSelectedTab('map');
+        props.flyToPlace([event.lng, event.lat]);
     }
 
     return(
@@ -57,7 +58,7 @@ const ListView = (props) =>{
                             {myEvent.venue}
                         </div>
                         <div className="event-address" onClick={() => onAddressClick(myEvent)}>
-                            <IconText icon={EnvironmentTwoTone}  text={`${myEvent.address}, ${myEvent.city}, ${myEvent.state}, ${myEvent.postalCode}`}
+                            <IconText icon={EnvironmentTwoTone}  text={<a>{`${myEvent.address}, ${myEvent.city}, ${myEvent.state}, ${myEvent.postalCode}`}</a>}
                             key="list-vertical-like-o" />
                         </div>
                         
@@ -77,6 +78,10 @@ const mapStateToProps = (state) =>{
         events: state.events
     }
 }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        flyToPlace: (coordinates) => dispatch({type:'FLY_TO_PLACE', val:coordinates})
+    }
+  }
 
-
-export default connect(mapStateToProps)(ListView);
+export default connect(mapStateToProps, mapDispatchToProps)(ListView);

@@ -30,7 +30,7 @@ const MapView = (props) => {
           setMap(map);
           map.resize();      
           
-
+         
           map.addSource('points', {
             'type': 'geojson',
             'data': props.geoJSONData,
@@ -38,7 +38,29 @@ const MapView = (props) => {
             clusterMaxZoom: 12, // Max zoom to cluster points on
             clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
          });
-        
+         map.addLayer({
+          'id': 'points',
+          'type': 'symbol',
+          'source': 'points',
+          'layout': {
+              // get the icon name from the source's "icon" property
+              // concatenate the name to get an icon from the style's sprite sheet
+              'icon-image': ['concat', ['get', 'icon'], '-15'],
+              // get the title name from the source's "title" property
+              'text-field': ['get', 'title'],
+              'icon-size': 3,
+              "icon-offset": [0, -7],
+              // 'icon-image': '{id}',
+              // 'icon-size': 0.25,
+              // "icon-anchor": 'bottom',
+              
+              'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+              'text-offset': [0, 0.6],
+              'text-anchor': 'top',
+              "text-size": 15
+          },
+          
+    });
 
          map.addLayer({
           id: 'clusters',
@@ -63,11 +85,11 @@ const MapView = (props) => {
             'circle-radius': [
               'step',
               ['get', 'point_count'],
-              10,
-              50,
               20,
               100,
-              30
+              40,
+              200,
+              60
             ]
           }
           });
@@ -85,29 +107,7 @@ const MapView = (props) => {
             }
             });
 
-          map.addLayer({
-              'id': 'points',
-              'type': 'symbol',
-              'source': 'points',
-              'layout': {
-                  // get the icon name from the source's "icon" property
-                  // concatenate the name to get an icon from the style's sprite sheet
-                  'icon-image': ['concat', ['get', 'icon'], '-15'],
-                  // get the title name from the source's "title" property
-                  'text-field': ['get', 'title'],
-                  'icon-size': 3,
-                  "icon-offset": [0, -7],
-                  // 'icon-image': '{id}',
-                  // 'icon-size': 0.25,
-                  // "icon-anchor": 'bottom',
-                  
-                  'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                  'text-offset': [0, 0.6],
-                  'text-anchor': 'top',
-                  "text-size": 15
-              },
-              
-        });
+          
 
        
         
@@ -250,7 +250,6 @@ const MapView = (props) => {
       };
       initializeMap({ setMap, mapContainer });
     }
-    
   }, [props.isNewLocation]);
 
   useEffect(()=>{
@@ -260,6 +259,15 @@ const MapView = (props) => {
   }, [map, props.lat])
 
 
+  useEffect(()=>{
+    if(props.flyToPlace){
+        map.flyTo({
+          center: props.flyToPlace,
+          zoom: 13 //set zoom 
+        });
+    }
+   
+  }, [props.flyToPlace])
 
   return (<div>
     <div ref={el => (mapContainer.current = el)} className="mapContainer" />
@@ -272,7 +280,8 @@ const mapStateToProps = (state) => {
     lng: state.lng,
     events: state.events,
     isNewLocation: state.isNewLocation,
-    geoJSONData: state.geoJSONData
+    geoJSONData: state.geoJSONData,
+    flyToPlace: state.flyToPlace
   }
 }
 

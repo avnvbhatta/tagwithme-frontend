@@ -13,7 +13,8 @@ const initialState = {
     },
     interestedEvents: new Set(),
     isNewLocation: false,
-    jwt: null
+    jwt: null,
+    flyToPlace: null
 }
 
 const reducer = (state = initialState, action) =>{
@@ -91,6 +92,10 @@ const reducer = (state = initialState, action) =>{
             newState.userData.following = [...newState.userData.following, parseInt(action.val)]
         }
        
+    }
+
+    if(action.type === actiontypes.FLY_TO_PLACE){
+        newState.flyToPlace = action.val;
     }
 
     return newState;
