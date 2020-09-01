@@ -57,9 +57,8 @@ const GlobalFeed = (props) => {
             
             {isLoading ? <LoadingOutlined /> :
 
-            <div>
+            <div className="commentsContainer">
                 <InterestedEvent events={globalEvents} setAddingComment={setAddingComment} setToggleLike={setToggleLike}/>
-               
             </div>
             }
         </div>

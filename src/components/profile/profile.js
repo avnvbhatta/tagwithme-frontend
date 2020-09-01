@@ -88,7 +88,9 @@ const Profile = (props) => {
                         
                     </div>
                 </div>
-                <MyEvents userid={userid}/>
+                <div className="commentsContainer">
+                    <MyEvents userid={userid}/>
+                </div>
                
             
         </div>

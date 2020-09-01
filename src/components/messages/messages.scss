@@ -3,7 +3,11 @@
     height: 100vh;
     overflow: auto;
     .list-item{
-        cursor: pointer;;
+        cursor: pointer;
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
         .follower-img{
             width: 30px;
             height: 30px;

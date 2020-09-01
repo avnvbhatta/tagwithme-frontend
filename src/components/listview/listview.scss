@@ -5,20 +5,27 @@
         overflow: auto;
     }
     
-    .ant-list-item-action{
-        li:first-child{
-            padding: 0 30px;
-        }
-        li{
-            padding: 0 30px;
-        }
-    }
+    .ant-list-item{
+        background: white;
+        border-radius: 8px;
+        margin: 0px 12px 12px 0px;
 
-    .event-details{
-        .event-venue{
-            font-weight: bold;
+        .ant-list-item-action{
+            li:first-child{
+                padding: 0 30px;
+            }
+            li{
+                padding: 0 30px;
+            }
+        }
+    
+        .event-details{
+            .event-venue{
+                font-weight: bold;
+            }
         }
     }
+    
     
     
 }

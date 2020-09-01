@@ -60,7 +60,7 @@ const Sidebar = (props) => {
     const [newGenericNotificationAlert, setNewGenericNotificationAlert] = useState(false);
     const [newMessageNotificationAlert, setNewMessageNotificationAlert] = useState(false);
 
-
+    const [theme, setTheme] = useState("light");
     //Update state based on menu selection
     const menuSelect = (e) =>{
         if(e.key === 'logout'){
@@ -94,9 +94,10 @@ const Sidebar = (props) => {
             <Sider className="sidebar"
                 collapsible 
                 breakpoint="sm"
+                theme={theme}
                 collapsed={collapsed} onCollapse={onCollapse}>
                 <SlackOutlined onClick={logoClick} style={{ fontSize: '32px', color: '#08c' }} className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={"/home"} selectedKeys={selectedKey} mode="inline" onSelect={menuSelect}>
+                <Menu theme={theme} defaultSelectedKeys={"/home"} selectedKeys={selectedKey} mode="inline" onSelect={menuSelect}>
                     <Menu.Item key="/home" icon={<HomeOutlined />}>
                         Home<Link to="/home" />
                     </Menu.Item>

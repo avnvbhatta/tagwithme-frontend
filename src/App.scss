@@ -43,3 +43,14 @@
         padding: 0;
     }
 }
+
+.ant-comment{
+    max-width: 600px;
+    width: 100%;
+}
+
+.commentsContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
