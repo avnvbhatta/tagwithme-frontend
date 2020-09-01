@@ -100,8 +100,8 @@ const InterestedEvent = (props) => {
                     
                 >
                     <div className="comment-area">
-                        <TextArea rows={1} autoSize allowClear onChange={handleTextAreaChange} value={comment} placeholder="Write a comment..."/>
-                        <button className="my-btn" onClick={() => addComment(event)}>{addingComment ? <LoadingOutlined /> : "Add Comment"}</button>
+                        <TextArea rows={1} autoSize style={{marginBottom: "8px"}} allowClear onChange={handleTextAreaChange} value={comment} placeholder="Write a comment..."/>
+                        {comment && <button className="my-btn"  onClick={() => addComment(event)}>{addingComment ? <LoadingOutlined /> : "Add Comment"}</button>}
                     </div>
 
                     <InterestedEventComment comments={event.comments}/>

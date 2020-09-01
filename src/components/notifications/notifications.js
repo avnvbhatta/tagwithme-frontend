@@ -31,10 +31,10 @@ const Notifications = (props) => {
         return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> followed you.</div> ;
         }
         else if(notification.type === 'like'){
-            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> liked your <Link to={`/notificationdetail/${notification.event_id}`}>post.</Link></div> ;
+            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> liked your post.</div> ;
         }
         else if(notification.type === 'comment'){
-            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> commented on your <Link to={`/notificationdetail/${notification.event_id}`}>post</Link>.</div> ;
+            return <div><Link to={`/profile/${notification.sender_id}`}>{notification.sender_name}</Link> commented on your post.</div> ;
 
         }
     }
@@ -47,23 +47,29 @@ const Notifications = (props) => {
                 itemLayout="horizontal"
                 dataSource={notificationData}
                 renderItem={notification => (
-                <List.Item>
-                    <List.Item.Meta
-                    avatar={<Avatar
-                        src={notification.sender_imgurl ? `${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${notification.sender_imgurl}` : ""}
-                        icon={notification.sender_imgurl ? "" :<UserOutlined />}
-                        alt={notification.sender_name}
-                        // onClick={()=> history.push(`/profile/${notification.sender_id}`)}
-                    /> }
-                    title={getSpecificNotif(notification)}
 
-                    description={
-                        <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                                <span>{moment(notification.created_at).fromNow()}</span>
-                        </Tooltip>
-                    }
-                    />
-                </List.Item>
+                    <Link to={notification.type === 'follow' ? `/profile/${notification.sender_id}` : `/notificationdetail/${notification.event_id}`}>
+                        <List.Item>
+                            <List.Item.Meta
+                            bordered
+                            avatar={
+                                <Avatar
+                                src={notification.sender_imgurl ? `${process.env.REACT_APP_API_GET_UPLOAD_ENDPOINT}${notification.sender_imgurl}` : ""}
+                                icon={notification.sender_imgurl ? "" :<UserOutlined />}
+                                alt={notification.sender_name}
+                                /> 
+                             }
+                            title={getSpecificNotif(notification)}
+
+                            description={
+                                <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                                        <span>{moment(notification.created_at).fromNow()}</span>
+                                </Tooltip>
+                            }
+                            />
+                        </List.Item>
+                    </Link>
+                
                 )}
             />
             
