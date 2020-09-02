@@ -14,6 +14,8 @@ import {
   } from '@ant-design/icons';
 import {connect} from "react-redux";
 import SocketComponent from '../socket/socket';
+import {ReactComponent as AppLogo} from '../../TagWithMeLogo.svg';
+
 
 const { Sider } = Layout;
 
@@ -96,7 +98,8 @@ const Sidebar = (props) => {
                 breakpoint="sm"
                 theme={theme}
                 collapsed={collapsed} onCollapse={onCollapse}>
-                <SlackOutlined onClick={logoClick} style={{ fontSize: '32px', color: '#08c' }} className="logo" />
+                <AppLogo onClick={logoClick} className="logo"/>
+
                 <Menu theme={theme} defaultSelectedKeys={"/home"} selectedKeys={selectedKey} mode="inline" onSelect={menuSelect}>
                     <Menu.Item key="/home" icon={<HomeOutlined />}>
                         Home<Link to="/home" />

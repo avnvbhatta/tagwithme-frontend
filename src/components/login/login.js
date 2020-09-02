@@ -5,6 +5,7 @@ import { Form, Input, Button, Checkbox, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from "axios";
 import {connect} from "react-redux";
+import {ReactComponent as AppLogo} from '../../TagWithMeLogo.svg';
 
 const LoginForm = (props) => {
     //method to navigate to other pages
@@ -44,6 +45,7 @@ const LoginForm = (props) => {
     return (
         <div className="login-container">
             <div className="login-div">
+                <AppLogo className="logo"/>
                 <h2>TagWithMe</h2>
                 <Form
                 name="normal_login"

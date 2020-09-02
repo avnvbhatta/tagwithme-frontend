@@ -4,6 +4,8 @@ import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Axios from "axios";
+import {ReactComponent as AppLogo} from '../../TagWithMeLogo.svg';
+
 
 const SignUpForm = (props) => {
     //Used for storing errors to display alerts
@@ -28,6 +30,7 @@ const SignUpForm = (props) => {
     return (
         <div className="signup-container">
             <div className="signup-div">
+                <AppLogo className="logo"/>
                 <h2>TagWithMe</h2>
                 <Form
                 name="normal_signup"
