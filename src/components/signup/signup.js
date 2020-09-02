@@ -31,7 +31,7 @@ const SignUpForm = (props) => {
         <div className="signup-container">
             <div className="signup-div">
                 <AppLogo className="logo"/>
-                <h2>TagWithMe</h2>
+                <h2 className="appLogoText">Tag With Me</h2>
                 <Form
                 name="normal_signup"
                 className="signup-form"

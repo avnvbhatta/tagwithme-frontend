@@ -23,8 +23,8 @@ const MyEvents = (props) => {
     }, [toggleLike, addingComment]);
 
     return ( 
-        <div className="myevents-container">
-            <h1>My Events</h1>
+        <div className="myevents-container commentsContainer">
+            <h1 style={{width: "100%", maxWidth:"600px"}}>My Events</h1>
             <InterestedEvent events={myEvents} setAddingComment={setAddingComment} setToggleLike={setToggleLike}/>
         </div>
      );

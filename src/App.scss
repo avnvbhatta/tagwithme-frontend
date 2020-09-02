@@ -45,7 +45,7 @@
 }
 
 .ant-comment{
-    max-width: 600px;
+     max-width: 600px;
     width: 100%;
 }
 
@@ -53,4 +53,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+
+.appLogoText{
+    font-family: 'Poiret One', cursive;
+    font-weight: bold;
+    font-size: 3em;
 }

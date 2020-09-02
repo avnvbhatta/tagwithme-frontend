@@ -46,7 +46,7 @@ const LoginForm = (props) => {
         <div className="login-container">
             <div className="login-div">
                 <AppLogo className="logo"/>
-                <h2>TagWithMe</h2>
+                <h2 className="appLogoText">Tag With Me</h2>
                 <Form
                 name="normal_login"
                 className="login-form"
@@ -57,7 +57,7 @@ const LoginForm = (props) => {
                     name="email"
                     rules={[{ required: true, message: 'Please enter your username.' }]}
                 >
-                        <Input prefix={<UserOutlined className="icon site-form-item-icon" />} placeholder="User Email" />
+                        <Input prefix={<UserOutlined className="icon site-form-item-icon" />} placeholder="Email" />
                     </Form.Item>
                     <Form.Item
                     name="password"

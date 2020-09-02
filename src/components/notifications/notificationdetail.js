@@ -25,7 +25,9 @@ const NotificationDetail = (props) => {
     return ( 
         <div style={{ padding: '10px', height: '100vh', overflow: 'auto'}} >
             {isLoading ? <LoadingOutlined /> :
-                <InterestedEvent events={interestedEvent} setAddingComment={setAddingComment} setToggleLike={setToggleLike} />
+                <div className="commentsContainer">
+                    <InterestedEvent events={interestedEvent} setAddingComment={setAddingComment} setToggleLike={setToggleLike} />
+                </div>
             }
         </div>
      );
