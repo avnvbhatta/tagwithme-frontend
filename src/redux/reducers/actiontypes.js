@@ -12,3 +12,4 @@ export const UPLOAD_IMAGE = 'UPLOAD_IMAGE';
 export const UNFOLLOW  = 'UNFOLLOW'; 
 export const FOLLOW = 'FOLLOW'; 
 export const FLY_TO_PLACE = 'FLY_TO_PLACE';
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';

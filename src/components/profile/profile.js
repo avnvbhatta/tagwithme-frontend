@@ -2,7 +2,9 @@ import React, {useState, useEffect} from "react"
 import "./profile.scss"
 import { FacebookOutlined, TwitterOutlined, InstagramOutlined, EnvironmentOutlined, LoadingOutlined, UserOutlined } from '@ant-design/icons';
 import MessageButton from '../button/message';
-import { Spin, Space, Avatar } from 'antd';
+import EditProfileButton from '../button/editprofile';
+
+import { Avatar } from 'antd';
 import {connect} from "react-redux";
 import ImgUpload from "../imgupload/imgupload";
 import axiosForAPI from "../../utils/axiosForAPI";
@@ -31,6 +33,9 @@ const Profile = (props) => {
             setIsOnline(data);
         })
     }, [isOnline])
+
+    useEffect(() => {
+    }, [props.city, props.state, props.userData])
 
     useEffect(()=>{
         const getData = async () =>{
@@ -66,30 +71,34 @@ const Profile = (props) => {
                     <div className="userDetails">
                         <div className="userName">
                             <div className="name">{userData.name}</div>
-                            <div className={`online-status ${isOnline ? "online" : "offline"}`}>
-                            </div>
+                            <div className={`online-status ${isOnline ? "online" : "offline"}`}></div>
+                            {isOwnProfile && <EditProfileButton className="my-btn" userData={userData}/>}
+
                         </div> 
                         
                         <div className="userLocation">
                             <EnvironmentOutlined />
-                            <div>Des Moines, IA</div>
+                            <div>{!props.city && !props.state ? "USA" : `${props.city ? props.city : ""}${props.city && props.state ? ", " : ""} ${props.state ? props.state : ""}` }</div>
                         </div>
                         
                         <div className="follows">
                             <FollowView isOwnProfile={isOwnProfile} userid={userid}/>
                         </div>
                         
-
-                        <div className="messageUser">
-                            {isOwnProfile && !isLoading? "" : <MessageButton className="msgBtn" userData={userData}/>}
-                            {isOwnProfile && !isLoading? "" : <FollowButton className="followBtn" userData={userData} fromProfile={true}/>}
-                        </div>
+                        {
+                            isOwnProfile && !isLoading? "" :
+                                <div className="messageUser">
+                                    <MessageButton className="msgBtn" userData={userData}/>
+                                    <FollowButton className="followBtn" userData={userData} fromProfile={true}/>
+                                </div>
+                        }
+                        
                         
                         
                     </div>
                 </div>
                 <div>
-                    <MyEvents userid={userid}/>
+                    <MyEvents userid={userid} username={userData.name}/>
                 </div>
                
             
@@ -103,6 +112,8 @@ const Profile = (props) => {
 const mapStateToProps = (state) => {
     return{
         userData: state.userData,
+        city: state.userData.city,
+        state: state.userData.state
     }
 }
 export default connect(mapStateToProps)(Profile);

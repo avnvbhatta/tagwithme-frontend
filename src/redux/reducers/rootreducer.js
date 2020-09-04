@@ -98,6 +98,12 @@ const reducer = (state = initialState, action) =>{
         newState.flyToPlace = action.val;
     }
 
+    if(action.type === actiontypes.UPDATE_USER_PROFILE){
+        newState.userData.state = action.val.state;
+        newState.userData.city = action.val.city;
+        newState.userData.name = action.val.name;
+    }
+
     return newState;
 
 };
